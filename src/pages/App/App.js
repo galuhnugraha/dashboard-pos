@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { AppRoutes } from "../../routes/app";
 import {
   HomeOutlined,
@@ -23,10 +23,19 @@ import { Avatar, Select, Divider, Dropdown } from 'antd';
 import {
   Layout, Menu, Col,
   Row,
+  Table 
 } from 'antd';
 import { createUseStyles } from "react-jss";
-import { Link,useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useStore } from "../../utils/useStores";
 import Logo from '../../assets/images/logo.png';
+import MediaQuery, { useMediaQuery } from "react-responsive";
+import {
+  BrowserView,
+  MobileView,
+  isBrowser,
+  isMobile
+} from "react-device-detect";
 
 const { Header, Content, Sider } = Layout;
 const { Option } = Select;
@@ -68,18 +77,44 @@ const useStyles = createUseStyles({
     `,
   hideSidebarButtonHovered: {
     '&:hover': `
-      color: #1890ff;
-    `
+    color: #1890ff; `
+  },
+  sideFixed: {
+    overflow: "auto",
+    height: "100vh",
+    position: "fixed",
+    left: 0,
+    zIndex: 99,
+  },
+  containFixed: {
+    overflow: "auto",
+    height: "100vh",
+    position: "fixed",
+    top: 48,
+    width: "100vw",
   },
 });
 
 const logo = require('../../assets/images/logo.png');
 
+
 export const App = (props) => {
   const [collapsed, setCollapsed] = useState(false);
+  const store = useStore();
+  const xl = useMediaQuery({ minWidth: 1024 });
+  const mediaQuery = {
+    isDesktop: useMediaQuery({ minWidth: 1024 }),
+    isTablet: useMediaQuery({ minWidth: 768, maxWidth: 1023 }),
+    isMobile: useMediaQuery({ maxWidth: 767 }),
+    isNotMobile: useMediaQuery({ minWidth: 768 }),
+  };
   let history = useHistory();
 
   const classes = useStyles();
+
+  useEffect(() => {
+    store.ui.setMediaQuery(mediaQuery);
+  });
   return (
     <Layout>
       <Header style={{ background: 'white', padding: 0, boxShadow: '1px 1px 1px 1px lightgrey', zIndex: 100, position: 'fixed', width: '100vw' }}>
@@ -116,13 +151,12 @@ export const App = (props) => {
             </Dropdown>
           </Col>
         </Row>
-
       </Header>
       <Layout style={{ margin: '55px 0px 0px' }}>
-        <Sider trigger={null} collapsible collapsed={collapsed} width={200} style={{ background: '#fff' }}>
+        <Sider  trigger={null} collapsible collapsed={collapsed} width={store.ui.mediaQuery.isMobile ? 175 : 175} style={{ background: '#fff' }}>
           {/* <div className={classes.logo} /> */}
           <div style={{ margin: '55px 0px 25px 20px' }}>
-            <Select defaultValue="Pilih Branch" style={{ width: 150 }} onChange={handleChange} placeholder="Pilih Branch">
+            <Select defaultValue="Pilih Branch" style={{ width: store.ui.mediaQuery.isMobile ? 120 : 125 }} onChange={handleChange} placeholder="Pilih Branch">
               <Option value="branch_yogyakarta">Branch Yogyakarta</Option>
               <Option value="branch_jakarta">Branch Jakarta</Option>
             </Select>
@@ -359,11 +393,10 @@ export const App = (props) => {
         </Sider>
         <Content
           style={{
-            margin: '24px 16px',
+            margin: '45px 16px',
             padding: 24,
             background: '#fff',
             height: 'calc(100vh - 64px)',
-            overflowY: 'hidden'
           }}
         >
           <AppRoutes />

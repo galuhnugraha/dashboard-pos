@@ -1,42 +1,182 @@
 import React, { useState } from "react";
-// import {observer} from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 // import {useStore} from "../../utils/useStores";
 import { Link, useHistory } from "react-router-dom";
-import './style.css';
+import { createUseStyles } from "react-jss";
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import Logo from '../../assets/images/logo.png';
+import { useStore } from "../../utils/useStores";
+import { Form, Input, Button, Checkbox, Row, Col, Card, Typography, message } from 'antd';
 
-export const Login = () => {
+const useStyles = createUseStyles({
+    logo: {
+        // height: 30,
+        paddingLeft: 20,
+        marginBottom: 16
+    },
+    logoFull: {
+        maxHeight: 38,
+        borderRadius: 4,
+        marginTop: 8
+    },
+
+});
+
+
+
+export const Login = observer(() => {
     let history = useHistory();
-    const [username, setUsername] = useState();
-    const [password, setPassword] = useState();
+    const store = useStore();
+    // const [email, handleMemberEmail] = useState("");
+    // const [password, handleMemberPassword] = useState("");
+    const [member_email,handleMemberEmail] = useState("");
+    const [member_password,handleMemberPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+
+
+
+
+    const classes = useStyles();
+
+    function valueStyleWidth(desktop, mobile) {
+        return store.ui.mediaQuery.isMobile ? mobile : desktop
+    }
+
+    const onFinish = values => {
+        console.log('Received values of form: ', values);
+        enterLoading(values).then(res => {
+            console.log(res, "awasaa");
+        }).catch((error) => {
+            console.log({ error }, "awasaa error");
+            // Some error occurred, you can inspect the code: error.code
+            // Common errors could be invalid email and invalid or expired OTPs.
+        });
+    };
+
+
+    const enterLoading = async (props) => {
+        setLoading(true);
+        const {member_email,member_password} = props;
+
+        try {
+            await store.auth.login({member_email, member_password});
+            setLoading(false);
+            return history.push("/app/home")
+        } catch (err) {
+            console.log(err.response.body.message, "loading falied error");
+            setLoading(false);
+        }
+
+    };
+    
+
 
     return <>
-        <div>
-            <div class="logo">
-                <div class="icon">
-                    {/* <img src="https://3.bp.blogspot.com/-c3oFqA2pjj4/W6kIZ6sYKEI/AAAAAAAAEY8/KrijheXG9wwPhXux2iZtiW-GKfrfAfh5wCLcBGAs/s400/pt.%2Bhakaaston%2Bsipp%2Bjos%2Btop.jpg" /> */}
-                    
-                </div>
-            </div>
-            <div class="login-page">
-                <div class="form">
-                <img src={Logo} style={{height: 50}}/>
-                    <div>
-                        
-                        <div>
-                            <h2 style={{ marginBottom: 45, fontSize: 16, borderBottomWidth: 1, }}>Login To Admin</h2>
+        <div style={{ width: '100vw', display: 'flex', justifyContent: 'center' }}>
+            <Row justify={'center'}>
+                <Col>
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        marginTop: '15vh',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        boxShadow: '0 0 20px  0  rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24)'
+                    }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', marginBottom: 20 }}>
+                            <img className={classes.logoFull} src={Logo} />
+                            {/*<Title level={4} style={{*/}
+                            {/*    margin: 0,*/}
+                            {/*    padding: 0,*/}
+                            {/*    fontSize: 11,*/}
+                            {/*    marginLeft: 5,*/}
+                            {/*    fontWeight: 600,*/}
+                            {/*    marginTop: 0,*/}
+                            {/*    color: '#413d3e'*/}
+                            {/*}}>Apps</Title>*/}
                         </div>
-                    </div>
-                    <form class="login-form">
-                        <card>
-                            <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                            <button onClick={() => history.push("/app/home")}>Login</button>
-                        </card>
-                    </form>
-                </div>
-            </div>
-        </div>
+                        <Card
+                            style={{ width: valueStyleWidth(300, 150), textAlign: 'center' }}
+                            headStyle={{ fontSize: 13, fontWeight: 200 }}
+                            className={"shadow"}
+                            bordered={true}
+                            title={'Sign in to your account'}
+                        // actions={[
+                        //     <div style={{marginTop: '20vh'}}/>,
+                        //     <Button
+                        //         type="primary"
+                        //         block={false}
+                        //         loading={loading}
+                        //         htmlType="submit"
+                        //         size={'large'}
+                        //         // style={{alignSelf: 'flex-end'}}
+                        //         // onSubmit={enterLoading}
+                        //         onClick={enterLoading}
+                        //         className="login-form-button">
+                        //         Sign In
+                        //     </Button>
+                        // ]}
+                        >
+                            <Form
+                                layout={'vertical'}
+                                name="normal_login"
+                                className="login-form"
+                                initialValues={member_email,member_password}
+                                onFinish={onFinish}
+                            >
+                                <Form.Item
+                                    label="Email"
+                                    name="email"
+                                    size={'large'}
+                                    rules={[{ required: false, message: 'Please input your Username!' }]}
+                                >
+                                    <Input
+                                        prefix={<UserOutlined className="site-form-item-icon" />}
+                                        type="text"
+                                        placeholder="Email"/>
+                                </Form.Item>
 
+                                <Form.Item
+                                    style={{
+                                        marginBottom: 0,
+                                    }}
+                                    label="Password"
+                                    name="password"
+                                    size={'large'}
+                                    rules={[{ required: false, message: 'Please input your Password!' }]}
+                                >
+                                    <Input.Password
+                                        prefix={<LockOutlined className="site-form-item-icon" />}
+                                        type="password"
+                                        placeholder="Password"
+                                    />
+                                </Form.Item>
+
+                                <Form.Item
+                                    style={{
+                                        marginBottom: 0,
+                                        marginTop: 15
+                                    }}>
+                                    <Button style={{ backgroundColor: 'SlateBlue', color: 'white' }}
+                                        block
+                                        loading={loading}
+                                        htmlType="submit"
+                                        size={'large'}
+                                        onSubmit={enterLoading}
+                                        // onClick={enterLoading}
+                                        className="login-form-button">
+                                        Sign In
+                                    {/*<Link to={LINKS.DASHBOARD} innerRef={node => {*/}
+                                        {/*    // `node` refers to the mounted DOM element*/}
+                                        {/*    // or null when unmounted*/}
+                                        {/*}}>Sign In</Link>*/}
+                                    </Button>
+                                </Form.Item>
+                            </Form>
+                        </Card>
+                    </div>
+                </Col>
+            </Row>
+        </div>;
     </>;
-};
+});

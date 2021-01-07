@@ -7,7 +7,7 @@ import {App} from "../pages/App/App";
 export const MainRoutes = () => {
   return <Switch>
     <Route path="/" exact>
-      <Redirect to={"/app/dashboard"}/>
+      <Redirect to={"/login"}/>
     </Route>
     <Route path="/login" exact>
       <Login />
