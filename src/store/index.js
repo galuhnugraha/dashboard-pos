@@ -1,6 +1,7 @@
 import { action, observable } from 'mobx';
 import { UiStore } from "./ui";
 import { Auth } from './auth';
+import { Home } from './home';
 
 export class Store {
   @observable token = "";

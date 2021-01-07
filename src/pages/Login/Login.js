@@ -27,10 +27,8 @@ const useStyles = createUseStyles({
 export const Login = observer(() => {
     let history = useHistory();
     const store = useStore();
-    // const [email, handleMemberEmail] = useState("");
-    // const [password, handleMemberPassword] = useState("");
-    const [member_email,handleMemberEmail] = useState("");
-    const [member_password,handleMemberPassword] = useState("");
+    const [email, handleMemberEmail] = useState("");
+    const [password, handleMemberPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
 
@@ -56,10 +54,9 @@ export const Login = observer(() => {
 
     const enterLoading = async (props) => {
         setLoading(true);
-        const {member_email,member_password} = props;
-
+        const {email,password} = props;
         try {
-            await store.auth.login({member_email, member_password});
+            await store.auth.login({email,password});
             setLoading(false);
             return history.push("/app/home")
         } catch (err) {
@@ -69,8 +66,6 @@ export const Login = observer(() => {
 
     };
     
-
-
     return <>
         <div style={{ width: '100vw', display: 'flex', justifyContent: 'center' }}>
             <Row justify={'center'}>
@@ -121,7 +116,7 @@ export const Login = observer(() => {
                                 layout={'vertical'}
                                 name="normal_login"
                                 className="login-form"
-                                initialValues={member_email,member_password}
+                                initialValues={{email,password}}
                                 onFinish={onFinish}
                             >
                                 <Form.Item
@@ -143,6 +138,7 @@ export const Login = observer(() => {
                                     label="Password"
                                     name="password"
                                     size={'large'}
+                                    initialValue="member_password"
                                     rules={[{ required: false, message: 'Please input your Password!' }]}
                                 >
                                     <Input.Password

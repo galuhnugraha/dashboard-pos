@@ -9,12 +9,9 @@ export class Auth{
     this.context = context;
   }
 
-  @action
-  login = async ({member_email, member_password}) => {
-    const loginResponse = await http.post('/users/login').send({
-      member_email,
-      member_password
-    });
+  @action 
+  login = async ({email, password}) => {
+    const loginResponse = await http.post('/login').send({email,password});
 
     if(loginResponse.body.message === 'success') {
       this.context.setToken(loginResponse.body.token);

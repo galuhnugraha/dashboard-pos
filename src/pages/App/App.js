@@ -49,10 +49,10 @@ const menu = (
   <Menu>
     <Menu.Item key="0">
       <Row>
-        <Col>
-          <LockOutlined style={{ fontSize: 18 }} />
+        <Col span={8}>
+          <LockOutlined style={{ fontSize: 16 }} />
         </Col>
-        <Col>
+        <Col span={8}>
           <a>Logout</a>
         </Col>
       </Row>
