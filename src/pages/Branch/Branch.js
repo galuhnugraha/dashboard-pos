@@ -5,51 +5,89 @@ import {
   Card,
   PageHeader,
   Button,
-  Table
+  Table,
+  Typography
 } from 'antd';
+import {
+  PlusOutlined,
+} from '@ant-design/icons';
 import MediaQuery, { useMediaQuery } from "react-responsive";
 import { useStore } from "../../utils/useStores";
 import { createUseStyles } from "react-jss";
 import './style.css';
 
 
-const dataSource = [
+const columns = [
   {
-    key: '1',
-    name: 'Mike',
-    age: 32,
-    address: '10 Downing Street',
-    status: 'active'
+    title: 'Nama Pemilik',
+    dataIndex: 'name',
   },
   {
-    key: '2',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street',
-    status: 'active'
+    title: 'Alamat',
+    dataIndex: 'address',
+    sorter: {
+      compare: (a, b) => a.address - b.address,
+      multiple: 3,
+    },
+  },
+  {
+    title: 'City',
+    dataIndex: 'city',
+    sorter: {
+      compare: (a, b) => a.city - b.city,
+      multiple: 4,
+    },
+  },
+  {
+    title: 'Nama Branch',
+    dataIndex: 'branch',
+    sorter: {
+      compare: (a, b) => a.branch - b.branch,
+      multiple: 2,
+    },
+  },
+  {
+    title: 'Phone',
+    dataIndex: 'phone',
+    sorter: {
+      compare: (a, b) => a.phone - b.phone,
+      multiple: 1,
+    },
   },
 ];
 
-const columns = [
+const data = [
   {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
+    key: '1',
+    name: 'John Brown',
+    address: 'Jl Lolongok Sukasari Bogor',
+    city: 'Bogor',
+    branch: 'galuh store',
+    phone: 70,
   },
   {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
+    key: '2',
+    name: 'Jim Green',
+    address: 'Jl Lolongok Sukasari Bogor',
+    city: 'Bogor',
+    branch: 'galuh store',
+    phone: 89,
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
+    key: '3',
+    name: 'Joe Black',
+    address: 'Jl Lolongok Sukasari Bogor',
+    city: 'Bogor',
+    branch: 'galuh store',
+    phone: 70,
   },
   {
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
+    key: '4',
+    name: 'Jim Red',
+    address: 'Jl Lolongok Sukasari Bogor',
+    city: 'Bogor',
+    branch: 'galuh store',
+    phone: 89,
   },
 ];
 
@@ -61,6 +99,24 @@ export const Branch = () => {
   const store = useStore();
 
   return <div>
-    <span>Branch</span>
+   <div style={{
+			display: "flex",
+			flexDirection: 'row',
+			justifyContent: 'space-between'
+		}}>
+			<Typography.Title level={5} style={{marginTop: 8}}>Branch</Typography.Title>
+			<Button type="primary"><PlusOutlined  />Tambah Data</Button>
+		</div>
+		<Row>
+			<Col span={24}>
+				<Table scroll={{ x: 'calc(50vh - 4em)' }}
+					   dataSource={data}
+					   columns={columns}
+					   size="middle"
+					   style={{width: '100%',marginTop: 18}}
+				/>
+			</Col>
+		</Row>
+
   </div>
 };

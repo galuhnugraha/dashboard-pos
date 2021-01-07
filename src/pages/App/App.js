@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { AppRoutes } from "../../routes/app";
 import {
   HomeOutlined,
@@ -23,7 +23,7 @@ import { Avatar, Select, Divider, Dropdown } from 'antd';
 import {
   Layout, Menu, Col,
   Row,
-  Table 
+  Table
 } from 'antd';
 import { createUseStyles } from "react-jss";
 import { Link, useHistory } from "react-router-dom";
@@ -45,20 +45,7 @@ function handleChange(value) {
   console.log(`selected ${value}`);
 }
 
-const menu = (
-  <Menu>
-    <Menu.Item key="0">
-      <Row>
-        <Col span={8}>
-          <LockOutlined style={{ fontSize: 16 }} />
-        </Col>
-        <Col span={8}>
-          <a>Logout</a>
-        </Col>
-      </Row>
-    </Menu.Item>
-  </Menu>
-);
+
 
 
 const useStyles = createUseStyles({
@@ -109,7 +96,22 @@ export const App = (props) => {
     isNotMobile: useMediaQuery({ minWidth: 768 }),
   };
   let history = useHistory();
-
+  const menu = (
+    <Menu>
+      <Menu.Item key="0" onClick={() => {
+        history.push('/login');
+      }}>
+        <Row>
+          <Col span={8}>
+            <LockOutlined style={{ fontSize: 16 }} />
+          </Col>
+          <Col span={8}>
+            <a>Logout</a>
+          </Col>
+        </Row>
+      </Menu.Item>
+    </Menu>
+  );
   const classes = useStyles();
 
   useEffect(() => {
@@ -153,7 +155,7 @@ export const App = (props) => {
         </Row>
       </Header>
       <Layout style={{ margin: '55px 0px 0px' }}>
-        <Sider  trigger={null} collapsible collapsed={collapsed} width={store.ui.mediaQuery.isMobile ? 175 : 175} style={{ background: '#fff' }}>
+        <Sider trigger={null} collapsible collapsed={collapsed} width={store.ui.mediaQuery.isMobile ? 175 : 175} style={{ background: '#fff' }}>
           {/* <div className={classes.logo} /> */}
           <div style={{ margin: '55px 0px 25px 20px' }}>
             <Select defaultValue="Pilih Branch" style={{ width: store.ui.mediaQuery.isMobile ? 120 : 125 }} onChange={handleChange} placeholder="Pilih Branch">

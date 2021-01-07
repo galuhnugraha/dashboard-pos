@@ -1,13 +1,16 @@
 import React from 'react';
-import {Redirect, Route, Switch} from "react-router-dom";
-import {Login} from "../pages/Login/Login";
-import {Register} from "../pages/Register/Register";
-import {App} from "../pages/App/App";
+import { Redirect, Route, Switch } from "react-router-dom";
+import { Login } from "../pages/Login/Login";
+import { Register } from "../pages/Register/Register";
+import { App } from "../pages/App/App";
+import {useStore} from "../utils/useStores";
+import { http } from '../utils/http';
 
-export const MainRoutes = () => {
+export const MainRoutes = (() => {
+
   return <Switch>
     <Route path="/" exact>
-      <Redirect to={"/login"}/>
+      <Redirect to={"/login"} />
     </Route>
     <Route path="/login" exact>
       <Login />
@@ -19,4 +22,4 @@ export const MainRoutes = () => {
       <App />
     </Route>
   </Switch>;
-};
+});

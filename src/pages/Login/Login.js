@@ -61,9 +61,9 @@ export const Login = observer(() => {
             return history.push("/app/home")
         } catch (err) {
             console.log(err.response.body.message, "loading falied error");
+            message.error(err.response.body.message);
             setLoading(false);
         }
-
     };
     
     return <>
@@ -123,7 +123,7 @@ export const Login = observer(() => {
                                     label="Email"
                                     name="email"
                                     size={'large'}
-                                    rules={[{ required: false, message: 'Please input your Username!' }]}
+                                    rules={[{ required: true, message: 'Please input your Username!' }]}
                                 >
                                     <Input
                                         prefix={<UserOutlined className="site-form-item-icon" />}
@@ -139,7 +139,7 @@ export const Login = observer(() => {
                                     name="password"
                                     size={'large'}
                                     initialValue="member_password"
-                                    rules={[{ required: false, message: 'Please input your Password!' }]}
+                                    rules={[{ required: true, message: 'Please input your Password!' }]}
                                 >
                                     <Input.Password
                                         prefix={<LockOutlined className="site-form-item-icon" />}
