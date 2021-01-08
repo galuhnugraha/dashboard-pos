@@ -117,6 +117,8 @@ export const App = (props) => {
   useEffect(() => {
     store.ui.setMediaQuery(mediaQuery);
   });
+
+  
   return (
     <Layout>
       <Header style={{ background: 'white', padding: 0, boxShadow: '1px 1px 1px 1px lightgrey', zIndex: 100, position: 'fixed', width: '100vw' }}>

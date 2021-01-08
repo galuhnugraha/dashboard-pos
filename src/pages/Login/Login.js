@@ -31,9 +31,6 @@ export const Login = observer(() => {
     const [password, handleMemberPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
-
-
-
     const classes = useStyles();
 
     function valueStyleWidth(desktop, mobile) {
