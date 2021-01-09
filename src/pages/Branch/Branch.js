@@ -50,14 +50,14 @@ export const Branch = observer((initialData) => {
     console.log(state.success)
   })
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchData()
- },[])
+  }, [])
 
 
-  async function fetchData(){
+  async function fetchData() {
     await store.member.getAll();
-}
+  }
 
 
   function editData(e) {
@@ -67,7 +67,7 @@ export const Branch = observer((initialData) => {
       phone: e.phone,
     }
     if (e.isEdit) {
-      store.member.updateMember(e.isEdit,data)
+      store.member.updateMember(e.isEdit, data)
         .then(res => {
           message.success('Data Member Di Update!');
           toggleSuccess();
@@ -186,13 +186,15 @@ export const Branch = observer((initialData) => {
       <Row>
         <Col span={24}>
           {renderModal()}
-          <Table scroll={{ x: 'calc(50vh - 4em)' }}
+          <Table
+            size={"small"}
             rowKey={record => record.id}
-            dataSource={store.member.data.slice(0, 7)}
+            dataSource={store.member.data}
             columns={columns}
-            pagination={{ pageSize: 5 }}
-            size="middle"
-            style={{ width: '100%', marginTop: 18 }}
+            hasEmpty={true}
+            bordered={true}
+            loading={store.member.isLoading}
+            style={{ marginTop: 15 }}
           />
         </Col>
       </Row>
