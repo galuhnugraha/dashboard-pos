@@ -39,25 +39,6 @@ export class MemberStore {
       })
   }
 
-  
-
-
-  // addTable() {
-  //   this.isLoading = true;
-  //   return http.post('/reg', {
-  //     email,name,phone
-  //   })
-  //     .then(res => {
-  //       this.isLoading = false;
-  //       console.log('ini');
-  //       return res;
-  //     })
-  //     .catch(err => {
-  //       console.log('err');
-  //       throw err;
-  //     })
-  // }
-
   @action
   addTable(data) {
     return http.post('/reg',data)
@@ -72,19 +53,20 @@ export class MemberStore {
 }
 
 
-
-  @action
-  editTable = async (id, data) => {
+@action
+updateMember(id,data) {
     this.isLoading = true;
-    return http.put('/update-user' + `/${id}`, data)
-      .then(res => {
+    return http.put("/update-param"+ '/' + id).send(data)
+    .then((res) => {
         this.isLoading = false;
-        return res;
-      }).catch(err => {
-        this.context.global_ui.closeLoading();
+        return res;            
+    })
+    .catch((err) => {
         this.isLoading = false;
         throw err;
-      })
-  }
+    });
+}
+
+
 
 }

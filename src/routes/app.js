@@ -36,6 +36,7 @@ import { Presensi } from "../pages/Presensi";
 import { ManajemenAccount } from "../pages/ManajemenAccount";
 import { ForgotPassword } from "../pages/Pengaturan/ForgotPassword";
 import { BranchPengaturan } from "../pages/Pengaturan/BranchPengaturan";
+import { BranchAdd } from "../pages/Branch/BranchAdd";
 
 export const AppRoutes = () => {
   return <Switch>
@@ -149,6 +150,9 @@ export const AppRoutes = () => {
     </Route>
     <Route path="/app/branch/manage" exact>  
       <BranchPengaturan />
+    </Route>
+    <Route path="/app/branch/add" exact>
+      <BranchAdd />
     </Route>
   </Switch>
 };

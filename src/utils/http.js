@@ -1,20 +1,27 @@
 import superagent from "superagent";
-import {appConfig} from "../config/app";
-
+import { appConfig } from "../config/app";
+import {store} from "./useStores";
 
 export const http = {
-    token : '',
+  token: '',
 
-    get: (url, opts = {}) => {
-      return superagent.get(appConfig.apiUrl + url);
-    },
-    post: (url, opts) => {
-      return superagent.post(appConfig.apiUrl + url);
-    },
-    put: (url, opts) => {
-      return superagent.put(appConfig.apiUrl + url);
-    },
-    del: (url, opts) => {
-      return superagent.del(appConfig.apiUrl + url);
+  get: (url, opts = {}) => {
+    return superagent.get(appConfig.apiUrl + url);
+  },
+  post: (url, opts) => {
+    return superagent.post(appConfig.apiUrl + url);
+  },
+  put: (url, opts) => {
+    let apiUrl = opts?.apiUrl ? opts.apiUrl + url : appConfig.apiUrl + url;
+    let q = superagent.put(apiUrl);
+    if (store.token) {
+      q = q.set({
+        'Authorization': 'Bearer ' + store.token
+      })
     }
-  };
+    return q;
+  },
+  del: (url, opts) => {
+    return superagent.del(appConfig.apiUrl + url);
+  }
+};
