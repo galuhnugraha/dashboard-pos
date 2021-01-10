@@ -21,7 +21,7 @@ import {
   EditOutlined,
   LockOutlined
 } from '@ant-design/icons';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory} from 'react-router-dom';
 import { useStore } from "../../utils/useStores";
 import { observer } from "mobx-react-lite";
 

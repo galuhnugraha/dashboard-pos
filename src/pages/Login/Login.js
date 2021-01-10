@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { observer } from 'mobx-react-lite';
-// import {useStore} from "../../utils/useStores";
-import { Link, useHistory } from "react-router-dom";
+import {useHistory } from "react-router-dom";
 import { createUseStyles } from "react-jss";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import Logo from '../../assets/images/logo.png';
 import { useStore } from "../../utils/useStores";
-import { Form, Input, Button, Checkbox, Row, Col, Card, Typography, message } from 'antd';
+import { Form, Input, Button,Row, Col, Card, message } from 'antd';
 
 const useStyles = createUseStyles({
     logo: {

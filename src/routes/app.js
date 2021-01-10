@@ -31,15 +31,21 @@ import { ImportDataInventory } from "../pages/ManajemenInventory/ImportDataInven
 import { HistoryUpdateInventory } from "../pages/ManajemenInventory/HistoryUpdateInventory";
 import { DaftarResep } from "../pages/ManajemenResep/DaftarResep";
 import { SettingPrinter } from "../pages/RemotePrinter/SettingPrinter";
-import {PurchaseOrder} from '../pages/PurchaseOrder';
+import { PurchaseOrder } from '../pages/PurchaseOrder';
 import { Presensi } from "../pages/Presensi";
 import { ManajemenAccount } from "../pages/ManajemenAccount";
 import { ForgotPassword } from "../pages/Pengaturan/ForgotPassword";
 import { BranchPengaturan } from "../pages/Pengaturan/BranchPengaturan";
 import { BranchAdd } from "../pages/Branch/BranchAdd";
+import { AnimatedSwitch } from "react-router-transition";
 
 export const AppRoutes = () => {
-  return <Switch>
+  return <AnimatedSwitch
+    atEnter={{ opacity: 0 }}
+    atLeave={{ opacity: 0 }}
+    atActive={{ opacity: 1 }}
+    className="switch-wrapper-app"
+  >
     <Route path="/app" exact>
       <Redirect to={"/app/home"} />
     </Route>
@@ -135,11 +141,11 @@ export const AppRoutes = () => {
     </Route>
     <Route path="/app/printers" exact>
       <SettingPrinter />
-    </Route>  
+    </Route>
     <Route path="/app/purchase" exact>
       <PurchaseOrder />
     </Route>
-    <Route path="/app/settings/attendance" exact> 
+    <Route path="/app/settings/attendance" exact>
       <Presensi />
     </Route>
     <Route path="/app/accounts" exact>
@@ -148,11 +154,11 @@ export const AppRoutes = () => {
     <Route path="/app/settings/profile" exact>
       <ForgotPassword />
     </Route>
-    <Route path="/app/branch/manage" exact>  
+    <Route path="/app/branch/manage" exact>
       <BranchPengaturan />
     </Route>
     <Route path="/app/branch/add" exact>
       <BranchAdd />
     </Route>
-  </Switch>
+  </AnimatedSwitch>
 };

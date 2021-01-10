@@ -3,7 +3,9 @@ import {
     Form,
     Input,
     DatePicker,
-    Button
+    Button,
+    Col,
+    Row
 } from 'antd';
 import {
     LockOutlined,
@@ -73,6 +75,7 @@ export const BranchAdd = observer(() => {
 
 
     return <div>
+        <h3>Tambah Data Member</h3>
         <Form
             layout={'vertical'}
             name="normal_login"
@@ -85,30 +88,31 @@ export const BranchAdd = observer(() => {
                 bdate: state.form.bdate,
                 password: state.form.password
             }}
+            style={{ marginTop: 15 }}
         // onFinish={onSubmit}
         >
             <Form.Item
                 label="Member Email"
                 name="member_email"
                 size={'large'}
-                rules={[{ required: true, message: 'Please input your Username!' }]}
+                rules={[{ required: true, message: 'Please input your Member Email!' }]}
             >
                 <Input
                     // prefix={<UserOutlined className="site-form-item-icon" />}
                     type="text"
-                    placeholder="member_email" onChange={(e) => change('email', e.target.value)} />
+                    placeholder="Masukan Member Email" onChange={(e) => change('email', e.target.value)} />
             </Form.Item>
 
             <Form.Item
                 label="Member Name"
                 name="member_name"
                 size={'large'}
-                rules={[{ required: true, message: 'Please input your Username!' }]}
+                rules={[{ required: true, message: 'Please input your Member Name!' }]}
             >
                 <Input
                     // prefix={<UserOutlined className="site-form-item-icon" />}
                     type="text"
-                    placeholder="member_name" onChange={(e) => change('name', e.target.value)} />
+                    placeholder="Masukan Member Name" onChange={(e) => change('name', e.target.value)} />
             </Form.Item>
             <Form.Item
                 label="Phone"
@@ -119,7 +123,7 @@ export const BranchAdd = observer(() => {
                 <Input
                     // prefix={<UserOutlined className="site-form-item-icon" />}
                     type="text"
-                    placeholder="member_phone" onChange={(e) => change('phone', e.target.value)} />
+                    placeholder="Masukan Member Phone" onChange={(e) => change('phone', e.target.value)} />
             </Form.Item>
             <Form.Item
                 label="No"
@@ -130,17 +134,17 @@ export const BranchAdd = observer(() => {
                 <Input
                     // prefix={<UserOutlined className="site-form-item-icon" />}
                     type="text"
-                    placeholder="no"
+                    placeholder="Masukan No"
                     onChange={(e) => change('no', e.target.value)}
                 />
             </Form.Item>
             <Form.Item
-                label="Bdate"
+                label="Birth Day"
                 name="bdate"
                 size={'large'}
-                rules={[{ required: true, message: 'Please input your Username!' }]}
+                rules={[{ required: true, message: 'Please input your Birth Day!' }]}
             >
-                <DatePicker onChange={date => handleDateChange(date)} />
+                <DatePicker onChange={date => handleDateChange(date)} style={{ width: '100%' }} />
             </Form.Item>
             <Form.Item
                 style={{
@@ -154,13 +158,22 @@ export const BranchAdd = observer(() => {
                 <Input.Password
                     prefix={<LockOutlined className="site-form-item-icon" />}
                     type="password"
-                    placeholder="Password"
+                    placeholder="Masukan Password"
                     onChange={(e) => change('password', e.target.value)}
                 />
             </Form.Item>
-            <Form.Item>
-                <Button type="primary" style={{ marginTop: 25 }} onClick={onSubmit}>Submit</Button>
-            </Form.Item>
+                <Row >
+                    <Col span={2}>
+                        <Form.Item>
+                            <Button type="primary" style={{ marginTop: 25 }} onClick={onSubmit}>Submit</Button>
+                        </Form.Item>
+                    </Col>
+                    <Col span={2}> 
+                        <Form.Item>
+                            <Button style={{ marginTop: 25 }} onClick={goBack}>Back</Button>
+                        </Form.Item>
+                    </Col>
+                </Row>
         </Form>
     </div>
 })

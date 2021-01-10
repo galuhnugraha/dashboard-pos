@@ -116,9 +116,10 @@ export const App = (props) => {
 
   useEffect(() => {
     store.ui.setMediaQuery(mediaQuery);
+    console.log(store.auth.data.email, 'test');
   });
 
-  
+
   return (
     <Layout>
       <Header style={{ background: 'white', padding: 0, boxShadow: '1px 1px 1px 1px lightgrey', zIndex: 100, position: 'fixed', width: '100vw' }}>
@@ -149,7 +150,6 @@ export const App = (props) => {
                 </div>
                 <Avatar icon={<UserOutlined />} style={{ margin: '15px 5px 0px 0px' }} />
                 <div style={{ padding: '0px 15px' }}>
-                  {/* <Icon type="down" style={{ fontSize: 10}} /> */}
                 </div>
               </a>
             </Dropdown>

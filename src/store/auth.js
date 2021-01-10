@@ -9,6 +9,24 @@ export class Auth{
     this.context = context;
   }
 
+
+  @computed
+  get userData() {
+    if(!this.context.token) {
+      return {
+        // user_id: '',
+        // role: '',
+        // email:'',
+        // partner_id: '',
+        // full_name: '',
+        member_email: ''
+      };
+    }
+    console.log(JSON.parse(atob(this.context.token.split('.')[1])))
+    return JSON.parse(atob(this.context.token.split('.')[1]));
+  }
+
+
   @action 
   login = async ({email, password}) => {
     const loginResponse = await http.post('/login').send({email,password});

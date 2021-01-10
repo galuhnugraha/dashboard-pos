@@ -3,8 +3,6 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import { Login } from "../pages/Login/Login";
 import { Register } from "../pages/Register/Register";
 import { App } from "../pages/App/App";
-import {useStore} from "../utils/useStores";
-import { http } from '../utils/http';
 
 export const MainRoutes = (() => {
 
