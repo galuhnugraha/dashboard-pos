@@ -58,7 +58,7 @@ export class MemberStore {
 
 
   @action
-  updateMember(id, data) {
+  updateMember = async (id, data) => {
     this.isLoading = true;
     return http.put(`/update-param/${id}`).send(data)
       .then((res) => {

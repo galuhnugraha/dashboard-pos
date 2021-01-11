@@ -98,6 +98,7 @@ export const Branch = observer((initialData) => {
     store.member.deleteAll(id).then((res) => {
       message.success('Success delete member')
       history.push('/app/branch');
+      fetchData();
     }).catch(err => {
       message.error(err.response.body.message)
     })
@@ -142,21 +143,18 @@ export const Branch = observer((initialData) => {
         key: 'action',
         render: (text, record) => (
           <span>
-            {/* <Popconfirm title="Are you sure delete this task?" okText="Yes" cancelText="No">
-          
-          </Popconfirm> */}
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <div>
                 <EditOutlined onClick={() => {
                   setEditMode(record);
                 }} />
               </div>
-              <Popconfirm title="Are you sure delete this task?" onConfirm={confirm}
+              <Popconfirm title="Are you sure delete this task?" onConfirm={() => {
+                deleteClick(record.id)
+              }}
                 onCancel={cancel} okText="Yes" cancelText="No">
                 <div style={{ marginLeft: 8 }}>
-                  <DeleteOutlined onClick={() => {
-                    deleteClick(record.id)
-                  }} />
+                  <DeleteOutlined />
                 </div>
               </Popconfirm>
             </div>
