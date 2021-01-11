@@ -16,7 +16,7 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from '@ant-design/icons';
-import { useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useStore } from "../../utils/useStores";
 import { observer } from "mobx-react-lite";
 
@@ -47,7 +47,7 @@ export const Branch = observer((initialData) => {
 
   useEffect(() => {
     fetchData()
-  },[]);
+  }, []);
 
 
   async function fetchData() {
@@ -182,6 +182,14 @@ export const Branch = observer((initialData) => {
             columns={columns}
             hasEmpty={true}
             bordered={true}
+            pagination={{
+              // total: store.member.totalPagesData,
+              showSizeChanger: false
+            }}
+            // current={store.member.currentPageData}
+            // onChange={(page) => {
+            //   store.member.setPageData(page.current);
+            // }}
             loading={store.member.isLoading}
             style={{ marginTop: 15 }}
           />

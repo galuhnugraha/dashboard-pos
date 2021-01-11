@@ -57,5 +57,5 @@ export class Auth {
   async logout() {
     localStorage.removeItem('token');
   }
-
+  
 }
