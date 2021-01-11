@@ -1,8 +1,8 @@
-import {http} from "../utils/http";
-import {action, computed, observable} from 'mobx';
+import { http } from "../utils/http";
+import { action, computed, observable } from 'mobx';
 
-export class Auth{
-    @observable data = [];
+export class Auth {
+  @observable data = [];
 
 
   constructor(context) {
@@ -12,7 +12,7 @@ export class Auth{
 
   @computed
   get userData() {
-    if(!this.context.token) {
+    if (!this.context.token) {
       return {
         // user_id: '',
         // role: '',
@@ -27,13 +27,31 @@ export class Auth{
   }
 
 
-  @action 
-  login = async ({email, password}) => {
-    const loginResponse = await http.post('/login').send({email,password});
+  // @action 
+  // login = async ({email, password}) => {
+  //   const loginResponse = await http.post('/login').send({email,password});
 
-    if(loginResponse.body.message === 'success') {
-      this.context.setToken(loginResponse.body.token);
-    }
+  //   if(loginResponse.body.message === 'success') {
+  //     this.context.setToken(loginResponse.body.token);
+  //   }
+  // }
+
+  @action
+  login = async (data) => {
+    this.isLoading = true;
+    return http.post(`/login`).send(data)
+      .then((res) => {
+        const token = res.body.data.token
+        localStorage.setItem("token" , token)
+        const getToken = localStorage.getItem("token")
+        console.log(getToken)
+        this.isLoading = false;
+        return res;
+      })
+      .catch((err) => {
+        this.isLoading = false;
+        throw err;
+      });
   }
 
   @action

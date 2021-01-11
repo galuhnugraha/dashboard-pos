@@ -5,7 +5,11 @@ export class MemberStore {
   @observable isLoading = false;
   @observable data = [];
   @observable delete = [];
-  baseUrl = `/all?pagination=${this.query.page}&limit=${this.query.limit}`;
+  baseUrl = `/users/members?pagination=${this.query.page}&limit=${this.query.limit}`;
+  token = localStorage.getItem("token")
+  opts = {
+      authorization: `Bearer ${this.token}`,
+  }
 
   constructor(context) {
     this.context = context;
@@ -19,9 +23,13 @@ export class MemberStore {
   @action
   getAll() {
     this.isLoading = true;
+    const token = localStorage.getItem("token")
+    const opts = {
+        authorization: `Bearer ${this.token}`,
+    }
     return http
-      .get(this.baseUrl)
-      .then((res) => {
+    .get(this.baseUrl).set({'authorization': `Bearer ${token}`})
+      .then((res) => { 
         this.data = res.body.data;
         this.isLoading = false;
         return res;

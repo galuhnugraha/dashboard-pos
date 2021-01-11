@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { observer } from 'mobx-react-lite';
-import {useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { createUseStyles } from "react-jss";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import Logo from '../../assets/images/logo.png';
 import { useStore } from "../../utils/useStores";
-import { Form, Input, Button,Row, Col, Card, message } from 'antd';
+import { Form, Input, Button, Row, Col, Card, message } from 'antd';
 
 const useStyles = createUseStyles({
     logo: {
@@ -43,21 +43,34 @@ export const Login = observer((initialData) => {
         });
     };
 
-
-    const enterLoading = async (props) => {
-        setLoading(true);
-        const {email,password} = props;
-        try {
-            await store.auth.login({email,password});
-            setLoading(false);
-            return history.push("/app/home")
-        } catch (err) {
-            console.log(err.response.body.message, "loading falied error");
-            message.error(err.response.body.message);
-            setLoading(false);
+    function enterLoading(e) {
+        const data = {
+            email: e.email,
+            password: e.password,
         }
-    };
-    
+        store.auth.login(data).then(res => {
+            message.success('Berhasil Masuk');
+            history.push('/app/home')
+            return res;
+        }).catch(err => {
+            message.error(err.message);
+          });
+    }
+
+    // const enterLoading = async () => {
+    //     setLoading(true);
+    //     const {email,password} = props;
+    //     try {
+    //         await store.auth.login({email,password});
+    //         setLoading(false);
+    //         return history.push("/app/home")
+    //     } catch (err) {
+    //         console.log(err.response.body.message, "loading falied error");
+    //         message.error(err.response.body.message);
+    //         setLoading(false);
+    //     }
+    // };
+
     return <>
         <div style={{ width: '100vw', display: 'flex', justifyContent: 'center' }}>
             <Row justify={'center'}>
@@ -71,7 +84,7 @@ export const Login = observer((initialData) => {
                         boxShadow: '0 0 20px  0  rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24)'
                     }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', marginBottom: 20 }}>
-                            <img className={classes.logoFull} src={Logo} alt={Logo}/>
+                            <img className={classes.logoFull} src={Logo} alt={Logo} />
                         </div>
                         <Card
                             style={{ width: valueStyleWidth(300, 150), textAlign: 'center' }}
@@ -96,7 +109,7 @@ export const Login = observer((initialData) => {
                                     <Input
                                         prefix={<UserOutlined className="site-form-item-icon" />}
                                         type="text"
-                                        placeholder="Email"/>
+                                        placeholder="Email" />
                                 </Form.Item>
 
                                 <Form.Item

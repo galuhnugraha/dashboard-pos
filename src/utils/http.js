@@ -9,7 +9,14 @@ export const http = {
     return superagent.get(appConfig.apiUrl + url);
   },
   post: (url, opts) => {
-    return superagent.post(appConfig.apiUrl + url);
+    let apiUrl = opts?.apiUrl ? opts.apiUrl + url : appConfig.apiUrl + url;
+    let q = superagent.post(apiUrl);
+    if(store.token) {
+      q = q.set({
+        'Authorization': 'Bearer ' + store.token
+      })
+    }
+    return q;
   },
   put: (url, opts) => {
     let apiUrl = opts?.apiUrl ? opts.apiUrl + url : appConfig.apiUrl + url;
