@@ -10,7 +10,7 @@ import {
 import {
     LockOutlined,
 } from '@ant-design/icons';
-import { useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { observer } from "mobx-react-lite";
 
@@ -25,7 +25,8 @@ export const BranchAdd = observer(() => {
             bdate: '',
             no: '',
             password: ''
-        }
+        },
+        isLoading: false
     })
 
     function onSubmit() {
@@ -38,11 +39,6 @@ export const BranchAdd = observer(() => {
             no: no,
             password: password
         }
-        // store.member.addTable(data).then(res => {
-        //   return res
-        // }).catch(err => {
-        //   return err
-        // })
         axios.post('https://akudancow.herokuapp.com/reg', data).then(res => {
             history.push("/app/branch")
             return res;
@@ -159,18 +155,18 @@ export const BranchAdd = observer(() => {
                     onChange={(e) => change('password', e.target.value)}
                 />
             </Form.Item>
-                <Row >
-                    <Col span={2}>
-                        <Form.Item>
-                            <Button type="primary" style={{ marginTop: 25 }} onClick={onSubmit}>Submit</Button>
-                        </Form.Item>
-                    </Col>
-                    <Col span={2}> 
-                        <Form.Item>
-                            <Button style={{ marginTop: 25 }} onClick={goBack}>Back</Button>
-                        </Form.Item>
-                    </Col>
-                </Row>
+            <Row >
+                <Col span={2}>
+                    <Form.Item>
+                        <Button type="primary" style={{ marginTop: 25 }} onClick={onSubmit}>Submit</Button>
+                    </Form.Item>
+                </Col>
+                <Col span={2}>
+                    <Form.Item>
+                        <Button style={{ marginTop: 25 }} onClick={goBack}>Back</Button>
+                    </Form.Item>
+                </Col>
+            </Row>
         </Form>
     </div>
 })

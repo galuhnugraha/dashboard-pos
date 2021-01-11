@@ -13,7 +13,7 @@ export class MemberStore {
 
   @observable query = {
     page: 1,
-    limit: 10
+    limit: 20
 };
 
   @action
@@ -46,7 +46,7 @@ export class MemberStore {
 
   @action
   addTable(data) {
-    return http.post('/reg', data)
+    return http.post('/reg',data)
       .then(res => {
         return res;
       })

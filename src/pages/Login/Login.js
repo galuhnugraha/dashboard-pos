@@ -35,7 +35,6 @@ export const Login = observer((initialData) => {
     }
 
     const onFinish = values => {
-        console.log('Received values of form: ', values);
         enterLoading(values).then(res => {
         }).catch((error) => {
             console.log({ error }, "awasaa error");
