@@ -23,25 +23,18 @@ const useStyles = createUseStyles({
 
 
 
-export const Login = observer((initialData) => {
+export const Login = observer(() => {
     let history = useHistory();
     const store = useStore();
-    const [loading, setLoading] = useState(false);
+    const [email] = useState("");
+    const [password] = useState("");
+    const [loading] = useState(false);
 
     const classes = useStyles();
 
     function valueStyleWidth(desktop, mobile) {
         return store.ui.mediaQuery.isMobile ? mobile : desktop
     }
-
-    const onFinish = values => {
-        enterLoading(values).then(res => {
-        }).catch((error) => {
-            console.log({ error }, "awasaa error");
-            // Some error occurred, you can inspect the code: error.code
-            // Common errors could be invalid email and invalid or expired OTPs.
-        });
-    };
 
     function enterLoading(e) {
         const data = {
@@ -57,19 +50,6 @@ export const Login = observer((initialData) => {
           });
     }
 
-    // const enterLoading = async () => {
-    //     setLoading(true);
-    //     const {email,password} = props;
-    //     try {
-    //         await store.auth.login({email,password});
-    //         setLoading(false);
-    //         return history.push("/app/home")
-    //     } catch (err) {
-    //         console.log(err.response.body.message, "loading falied error");
-    //         message.error(err.response.body.message);
-    //         setLoading(false);
-    //     }
-    // };
 
     return <>
         <div style={{ width: '100vw', display: 'flex', justifyContent: 'center' }}>
@@ -97,8 +77,8 @@ export const Login = observer((initialData) => {
                                 layout={'vertical'}
                                 name="normal_login"
                                 className="login-form"
-                                initialValues={initialData}
-                                onFinish={onFinish}
+                                initialValues={{email,password}}
+                                onFinish={enterLoading}
                             >
                                 <Form.Item
                                     label="Email"

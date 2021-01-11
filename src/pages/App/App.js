@@ -76,22 +76,40 @@ export const App = (props) => {
   const [collapsed, setCollapsed] = useState(false);
   const store = useStore();
   let history = useHistory();
+
+  const logout = () => {
+    store.auth.logout().then((res) => {
+      history.push("/login");
+    });
+  };
+
+
   const menu = (
     <Menu>
-      <Menu.Item key="0" onClick={() => {
-        history.push('/login');
-      }}>
-        <Row>
-          <Col span={8}>
-            <LockOutlined style={{ fontSize: 16 }} />
-          </Col>
-          <Col span={8}>
-            <p>Logout</p>
-          </Col>
-        </Row>
+      <Menu.Item key="0" onClick={logout}>
+        <a style={{ fontSize: 11 }}>Logout</a>
       </Menu.Item>
     </Menu>
   );
+
+
+  // const menu = (
+  //   <Menu>
+  //     <Menu.Item key="0" onClick={() => {
+  //       logout()
+  //     }}>
+  //       <Row>
+  //         <Col span={8}>
+  //           <LockOutlined style={{ fontSize: 16 }} />
+  //         </Col>
+  //         <Col span={8}>
+  //           <p>Logout</p>
+  //         </Col>
+  //       </Row>
+  //     </Menu.Item>
+  //   </Menu>
+  // );
+
   const classes = useStyles();
 
   useEffect(() => {

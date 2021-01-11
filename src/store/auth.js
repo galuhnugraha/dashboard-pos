@@ -42,7 +42,7 @@ export class Auth {
     return http.post(`/login`).send(data)
       .then((res) => {
         const token = res.body.data.token
-        localStorage.setItem("token" , token)
+        localStorage.setItem("token", token)
         const getToken = localStorage.getItem("token")
         console.log(getToken)
         this.isLoading = false;
@@ -54,9 +54,10 @@ export class Auth {
       });
   }
 
+
   @action
-  logout() {
-    this.context.setToken();
+  async logout() {
+    localStorage.removeItem('token');
   }
 
 }

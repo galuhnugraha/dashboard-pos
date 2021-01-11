@@ -17,16 +17,13 @@ export class MemberStore {
 
   @observable query = {
     page: 1,
-    limit: 20
+    limit: 50
 };
 
   @action
   getAll() {
     this.isLoading = true;
     const token = localStorage.getItem("token")
-    const opts = {
-        authorization: `Bearer ${this.token}`,
-    }
     return http
     .get(this.baseUrl).set({'authorization': `Bearer ${token}`})
       .then((res) => { 
@@ -42,7 +39,8 @@ export class MemberStore {
   @action
   deleteAll = async (id) => {
     this.isLoading = true;
-    return http.del(`/delete-param/${id}`).then(res => {
+    const token = localStorage.getItem("token")
+    return http.del(`/users/param-delete/${id}`).set({'authorization': `Bearer ${token}`}).then(res => {
       this.delete = res.body.data;
       this.isLoading = false;
       return res;
@@ -68,7 +66,8 @@ export class MemberStore {
   @action
   updateMember = async (id, data) => {
     this.isLoading = true;
-    return http.put(`/update-param/${id}`).send(data)
+    const token = localStorage.getItem("token")
+    return http.put(`/users/param-update/${id}`).set({'authorization': `Bearer ${token}`}).send(data)
       .then((res) => {
         this.isLoading = false;
         return res;

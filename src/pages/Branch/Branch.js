@@ -91,7 +91,7 @@ export const Branch = observer((initialData) => {
 
   function cancel(e) {
     console.log(e);
-    message.error('Click on No');
+    message.error('Pliss Jgn Hapus Data Saya ya , saya mohon');
   }
 
   function confirm(id) {
