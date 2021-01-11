@@ -1,5 +1,4 @@
-import {action, computed, observable} from 'mobx';
-import {useMediaQuery} from "react-responsive";
+import {action,observable} from 'mobx';
 
 
 export class UiStore {
@@ -8,7 +7,6 @@ export class UiStore {
 
     @action
     setMediaQuery(data) {
-        console.log(data, this.mediaQuery, "mediadata");
         if (this.mediaQuery.isDesktop !== data.isDesktop || this.mediaQuery.isMobile !== data.isMobile) {
             this.mediaQuery = data;
         }

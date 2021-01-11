@@ -1,12 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { observer } from 'mobx-react-lite';
-import {useStore} from '../../utils/useStores';
-import { useHistory} from 'react-router-dom';
-import { Card } from 'antd';
 
 export const Dashboard = observer(() => {
-  const store = useStore();
-  let history = useHistory();
 
   return <div>
     <div className="site-card-border-less-wrapper">

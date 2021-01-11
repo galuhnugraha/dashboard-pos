@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
-  Layout, Menu, Col,
+  Col,
   Row,
-  Card,
-  PageHeader,
   Button,
   Table,
   Typography,
@@ -12,14 +10,11 @@ import {
   Modal,
   Form,
   Input,
-  DatePicker,
-  Spin,
 } from 'antd';
 import {
   PlusOutlined,
   DeleteOutlined,
   EditOutlined,
-  LockOutlined
 } from '@ant-design/icons';
 import { useHistory} from 'react-router-dom';
 import { useStore } from "../../utils/useStores";
@@ -52,7 +47,7 @@ export const Branch = observer((initialData) => {
 
   useEffect(() => {
     fetchData()
-  }, [])
+  },[]);
 
 
   async function fetchData() {
@@ -115,10 +110,6 @@ export const Branch = observer((initialData) => {
   const addBranch = () => {
     history.push('/app/branch/add')
   }
-
-  useEffect(() => {
-    store.member.getAll();
-  }, []);
 
   {
 
@@ -217,9 +208,7 @@ export const Branch = observer((initialData) => {
         form
           .validateFields()
           .then(values => {
-            form.resetFields();
             editData(values);
-            form.setFieldsValue({});
           })
           .catch(info => {
             console.log('Validate Failed:', info);

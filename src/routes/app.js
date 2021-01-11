@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Route} from "react-router-dom";
 import { Payment } from "../pages/Payment/Payment";
 import { Branch } from "../pages/Branch/Branch";
 import { Dashboard } from "../pages/Dashboard/Dashboard";

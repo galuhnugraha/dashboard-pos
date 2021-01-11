@@ -23,11 +23,9 @@ const useStyles = createUseStyles({
 
 
 
-export const Login = observer(() => {
+export const Login = observer((initialData) => {
     let history = useHistory();
     const store = useStore();
-    const [email, handleMemberEmail] = useState("");
-    const [password, handleMemberPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
     const classes = useStyles();
@@ -39,7 +37,6 @@ export const Login = observer(() => {
     const onFinish = values => {
         console.log('Received values of form: ', values);
         enterLoading(values).then(res => {
-            console.log(res, "awasaa");
         }).catch((error) => {
             console.log({ error }, "awasaa error");
             // Some error occurred, you can inspect the code: error.code
@@ -75,16 +72,7 @@ export const Login = observer(() => {
                         boxShadow: '0 0 20px  0  rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24)'
                     }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', marginBottom: 20 }}>
-                            <img className={classes.logoFull} src={Logo} />
-                            {/*<Title level={4} style={{*/}
-                            {/*    margin: 0,*/}
-                            {/*    padding: 0,*/}
-                            {/*    fontSize: 11,*/}
-                            {/*    marginLeft: 5,*/}
-                            {/*    fontWeight: 600,*/}
-                            {/*    marginTop: 0,*/}
-                            {/*    color: '#413d3e'*/}
-                            {/*}}>Apps</Title>*/}
+                            <img className={classes.logoFull} src={Logo} alt={Logo}/>
                         </div>
                         <Card
                             style={{ width: valueStyleWidth(300, 150), textAlign: 'center' }}
@@ -92,27 +80,12 @@ export const Login = observer(() => {
                             className={"shadow"}
                             bordered={true}
                             title={'Sign in to your account'}
-                        // actions={[
-                        //     <div style={{marginTop: '20vh'}}/>,
-                        //     <Button
-                        //         type="primary"
-                        //         block={false}
-                        //         loading={loading}
-                        //         htmlType="submit"
-                        //         size={'large'}
-                        //         // style={{alignSelf: 'flex-end'}}
-                        //         // onSubmit={enterLoading}
-                        //         onClick={enterLoading}
-                        //         className="login-form-button">
-                        //         Sign In
-                        //     </Button>
-                        // ]}
                         >
                             <Form
                                 layout={'vertical'}
                                 name="normal_login"
                                 className="login-form"
-                                initialValues={{email,password}}
+                                initialValues={initialData}
                                 onFinish={onFinish}
                             >
                                 <Form.Item

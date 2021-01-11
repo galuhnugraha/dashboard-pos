@@ -1,9 +1,6 @@
 import React from 'react';
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button} from 'antd';
 
-const submit = () => {
-    
-}
 
 const onFinish = (values: any) => {
     console.log('Success:', values);

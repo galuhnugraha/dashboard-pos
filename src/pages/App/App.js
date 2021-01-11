@@ -23,19 +23,11 @@ import { Avatar, Select, Divider, Dropdown } from 'antd';
 import {
   Layout, Menu, Col,
   Row,
-  Table
 } from 'antd';
 import { createUseStyles } from "react-jss";
 import { Link, useHistory } from "react-router-dom";
 import { useStore } from "../../utils/useStores";
 import Logo from '../../assets/images/logo.png';
-import MediaQuery, { useMediaQuery } from "react-responsive";
-import {
-  BrowserView,
-  MobileView,
-  isBrowser,
-  isMobile
-} from "react-device-detect";
 
 const { Header, Content, Sider } = Layout;
 const { Option } = Select;
@@ -44,9 +36,6 @@ const { SubMenu } = Menu;
 function handleChange(value) {
   console.log(`selected ${value}`);
 }
-
-
-
 
 const useStyles = createUseStyles({
   logo: `
@@ -82,19 +71,10 @@ const useStyles = createUseStyles({
   },
 });
 
-const logo = require('../../assets/images/logo.png');
-
 
 export const App = (props) => {
   const [collapsed, setCollapsed] = useState(false);
   const store = useStore();
-  const xl = useMediaQuery({ minWidth: 1024 });
-  const mediaQuery = {
-    isDesktop: useMediaQuery({ minWidth: 1024 }),
-    isTablet: useMediaQuery({ minWidth: 768, maxWidth: 1023 }),
-    isMobile: useMediaQuery({ maxWidth: 767 }),
-    isNotMobile: useMediaQuery({ minWidth: 768 }),
-  };
   let history = useHistory();
   const menu = (
     <Menu>
@@ -106,7 +86,7 @@ export const App = (props) => {
             <LockOutlined style={{ fontSize: 16 }} />
           </Col>
           <Col span={8}>
-            <a>Logout</a>
+            <p>Logout</p>
           </Col>
         </Row>
       </Menu.Item>
@@ -115,8 +95,7 @@ export const App = (props) => {
   const classes = useStyles();
 
   useEffect(() => {
-    store.ui.setMediaQuery(mediaQuery);
-    console.log(store.auth.data.email, 'test');
+    // store.ui.setMediaQuery(mediaQuery);
   });
 
 
@@ -145,13 +124,13 @@ export const App = (props) => {
           </Col>
           <Col>
             <Dropdown overlay={menu} trigger={['click']}>
-              <a className="ant-dropdown-link" href="#" style={{ color: 'grey', display: 'flex', flexDirection: 'row', height: 50 }}>
+              <div className="ant-dropdown-link" href="#" style={{ color: 'grey', display: 'flex', flexDirection: 'row', height: 50 }}>
                 <div style={{ padding: '5px 15px', paddingBottom: 0 }}>
                 </div>
                 <Avatar icon={<UserOutlined />} style={{ margin: '15px 5px 0px 0px' }} />
                 <div style={{ padding: '0px 15px' }}>
                 </div>
-              </a>
+              </div>
             </Dropdown>
           </Col>
         </Row>
@@ -346,14 +325,10 @@ export const App = (props) => {
             </SubMenu>
             <SubMenu key="sub8" title="Manajemen Vendor" icon={<TabletOutlined style={{ fontSize: 18 }} />}>
               <Menu.Item key="32">
-                <Link>
                   <p>Daftar Vendor</p>
-                </Link>
               </Menu.Item>
               <Menu.Item key="33">
-                <Link>
                   <p>Tambah Vendor</p>
-                </Link>
               </Menu.Item>
             </SubMenu>
             <Menu.Item key="34">

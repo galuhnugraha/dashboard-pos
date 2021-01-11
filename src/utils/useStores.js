@@ -7,7 +7,6 @@ export const store = new Store(localStorage.getItem('id_token'));
 
 export const StoreProvider = ({ children }) => {
   const localStore = useLocalStore(() => {
-    console.log(store);
     return store;
   });
   return <storeContext.Provider value={localStore}>{children}</storeContext.Provider>

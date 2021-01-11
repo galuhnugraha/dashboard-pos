@@ -9,15 +9,12 @@ import {
 } from 'antd';
 import {
     LockOutlined,
-    ArrowLeftOutlined
 } from '@ant-design/icons';
-import { useHistory, useParams } from 'react-router-dom';
-import { useStore } from "../../../utils/useStores";
+import { useHistory} from 'react-router-dom';
 import axios from 'axios';
 import { observer } from "mobx-react-lite";
 
 export const BranchAdd = observer(() => {
-    const store = useStore();
     let history = useHistory();
 
     const [state, setState] = useState({

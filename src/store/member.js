@@ -1,6 +1,5 @@
 import { http } from "../utils/http";
-import { action, computed, observable } from 'mobx';
-import * as qs from "querystring";
+import { action,observable } from 'mobx';
 
 export class MemberStore {
   @observable isLoading = false;
@@ -17,22 +16,17 @@ export class MemberStore {
     limit: 10
 };
 
-
-
-
   @action
   getAll() {
     this.isLoading = true;
     return http
       .get(this.baseUrl)
       .then((res) => {
-        console.log({ res }, "data member -> ");
         this.data = res.body.data;
         this.isLoading = false;
         return res;
       })
       .catch((err) => {
-        console.log("Error!", err);
         throw err;
       });
   }
@@ -54,7 +48,6 @@ export class MemberStore {
   addTable(data) {
     return http.post('/reg', data)
       .then(res => {
-        console.log('ini');
         return res;
       })
       .catch(err => {
@@ -67,7 +60,7 @@ export class MemberStore {
   @action
   updateMember(id, data) {
     this.isLoading = true;
-    return http.put("/update-param" + '/' + id).send(data)
+    return http.put(`/update-param/${id}`).send(data)
       .then((res) => {
         this.isLoading = false;
         return res;
