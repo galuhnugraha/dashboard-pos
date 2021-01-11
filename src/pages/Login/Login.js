@@ -77,7 +77,6 @@ export const Login = observer(() => {
                                 layout={'vertical'}
                                 name="normal_login"
                                 className="login-form"
-                                initialValues={{email,password}}
                                 onFinish={enterLoading}
                             >
                                 <Form.Item
@@ -99,7 +98,6 @@ export const Login = observer(() => {
                                     label="Password"
                                     name="password"
                                     size={'large'}
-                                    initialValue="member_password"
                                     rules={[{ required: true, message: 'Please input your Password!' }]}
                                 >
                                     <Input.Password

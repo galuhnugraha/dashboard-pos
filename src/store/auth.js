@@ -43,8 +43,6 @@ export class Auth {
       .then((res) => {
         const token = res.body.data.token
         localStorage.setItem("token", token)
-        const getToken = localStorage.getItem("token")
-        console.log(getToken)
         this.isLoading = false;
         return res;
       })
