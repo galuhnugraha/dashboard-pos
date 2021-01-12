@@ -26,9 +26,7 @@ const useStyles = createUseStyles({
 export const Login = observer(() => {
     let history = useHistory();
     const store = useStore();
-    const [email] = useState("");
-    const [password] = useState("");
-    const [loading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const classes = useStyles();
 
@@ -36,18 +34,26 @@ export const Login = observer(() => {
         return store.ui.mediaQuery.isMobile ? mobile : desktop
     }
 
-    function enterLoading(e) {
+    const onFinish = values => {
+        enterLoading(values);
+    };
+
+
+    const enterLoading = (e) => {
+        setLoading(true);
         const data = {
             email: e.email,
             password: e.password,
         }
         store.auth.login(data).then(res => {
             message.success('Berhasil Masuk');
-            history.push('/app/home')
+            setLoading(false);
+            history.push('/app/home');
             return res;
         }).catch(err => {
             message.error(err.message);
-          });
+            setLoading(false);
+        });
     }
 
 
@@ -77,7 +83,7 @@ export const Login = observer(() => {
                                 layout={'vertical'}
                                 name="normal_login"
                                 className="login-form"
-                                onFinish={enterLoading}
+                                onFinish={onFinish}
                             >
                                 <Form.Item
                                     label="Email"
