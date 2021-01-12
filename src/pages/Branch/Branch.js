@@ -35,7 +35,12 @@ export const Branch = observer((initialData) => {
       bdate: '',
       no: '',
       password: ''
-    }
+    },
+    data: [],
+    // pagination: {
+    //   current: 1,
+    //   pageSize: 10,
+    // },
   });
 
   const toggleSuccess = (() => {
@@ -182,14 +187,6 @@ export const Branch = observer((initialData) => {
             columns={columns}
             hasEmpty={true}
             bordered={true}
-            pagination={{
-              // total: store.member.totalPagesData,
-              showSizeChanger: false
-            }}
-            // current={store.member.currentPageData}
-            // onChange={(page) => {
-            //   store.member.setPageData(page.current);
-            // }}
             loading={store.member.isLoading}
             style={{ marginTop: 15 }}
           />
