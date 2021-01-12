@@ -20,28 +20,10 @@ export class MemberStore {
   }
 
   @action
-  setCurrent(current = 10) {
+  setCurrentPage(current = 10) {
     this.pageSize = current;
     this.getAll();
   }
-  
-
-  // @action
-  // getAll() {
-  //   this.isLoading = true;
-  //   const token = localStorage.getItem("token")
-  //   return http
-  //     .get(this.baseUrl).set({ 'authorization': `Bearer ${token}` })
-  //     .then((res) => {
-  //       this.data = res.body.data;
-  //       this.maxLength = res.body.total_data;
-  //       this.isLoading = false;
-  //       return res;
-  //     })
-  //     .catch((err) => {
-  //       throw err;
-  //     });
-  // }
 
   @action
   async getAll() {

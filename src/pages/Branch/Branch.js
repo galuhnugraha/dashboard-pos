@@ -48,7 +48,7 @@ export const Branch = observer((initialData) => {
   useEffect(() => {
     fetchData();
     store.member.setPage(1);
-    store.member.setCurrent(10);
+    store.member.setCurrentPage(10);
   }, []);
 
   const { Search } = Input;
@@ -184,7 +184,7 @@ export const Branch = observer((initialData) => {
         justifyContent: 'space-between'
       }}>
         {/* <Typography.Title level={5} style={{ marginTop: 8 }}>Branch</Typography.Title> */}
-        <Search placeholder="Masukan Search guys" onSearch={onSearch} enterButton="search" style={{width: 200,marginTop: 25}}/>
+        <Search placeholder="Masukan Search guys" onSearch={onSearch} enterButton="search" style={{ width: 200, marginTop: 25 }} />
       </div>
       <Row>
         <Col span={24}>
@@ -198,6 +198,9 @@ export const Branch = observer((initialData) => {
             bordered={true}
             pagination={{
               total: store.member.maxLength,
+              onShowSizeChange: (current,pageSize) => {
+                store.member.setCurrentPage(pageSize);
+              }
             }}
             onChange={(page) => {
               store.member.setPage(page.current);
