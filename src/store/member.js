@@ -5,65 +5,47 @@ export class MemberStore {
   @observable isLoading = false;
   @observable data = [];
   @observable delete = [];
-  baseUrl = `/users/members?pagination=${this.query.page}&limit=${this.query.limit}`;
-  token = localStorage.getItem("token")
-  opts = {
-    authorization: `Bearer ${this.token}`,
-  }
+  @observable currentPage = 1;
+  @observable pageSize = 10;
+  @observable maxLength = 0;
 
   constructor(context) {
     this.context = context;
   }
 
-  @observable query = {
-    page: 1,
-    limit: 3000
-  };
+  @action
+  setPage(page = 1) {
+    this.currentPage = page;
+    this.getAll();
+  }
 
-  // @observable currentPageCarsIn = 1;
-  //   @observable currentPageCarsOut = 1;
-  //   @observable currentPageMatchingCars = 1;
-
-  //   @observable totalPageCarsIn = 0;
-  //   @observable totalPageCarsOut = 0;
-  //   @observable totalPageMatchingCars = 0;
-
-  //   @action
-  //   setPageCarsIn(page=1) {
-  //       this.currentPageCarsIn = page;
-  //       this.getCarsIn();
-  //   }
-
-  //   @action
-  //   setPageCarsOut(page=1) {
-  //       this.currentPageCarsOut = page;
-  //       this.getCarsOut();
-  //   }
-
-  //   @action
-  //   setPageMatchingCars(page=1) {
-  //       this.currentPageMatchingCars = page;
-  //       this.getMatchingCars();
-  //   }
-
-
-
-
+  // @action
+  // getAll() {
+  //   this.isLoading = true;
+  //   const token = localStorage.getItem("token")
+  //   return http
+  //     .get(this.baseUrl).set({ 'authorization': `Bearer ${token}` })
+  //     .then((res) => {
+  //       this.data = res.body.data;
+  //       this.maxLength = res.body.total_data;
+  //       this.isLoading = false;
+  //       return res;
+  //     })
+  //     .catch((err) => {
+  //       throw err;
+  //     });
+  // }
 
   @action
-  getAll() {
+  async getAll() {
     this.isLoading = true;
     const token = localStorage.getItem("token")
-    return http
-      .get(this.baseUrl).set({ 'authorization': `Bearer ${token}` })
-      .then((res) => {
-        this.data = res.body.data;
-        this.isLoading = false;
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
+    const data = await http.get(`/users/members?pagination=${this.currentPage}&limit=${this.pageSize}`).set({ 'authorization': `Bearer ${token}` });
+    this.data = data.body.data;
+    this.maxLength = data.body.totalData;
+
+    this.isLoading = false;
+
   }
 
   @action

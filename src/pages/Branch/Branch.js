@@ -36,11 +36,6 @@ export const Branch = observer((initialData) => {
       no: '',
       password: ''
     },
-    data: [],
-    // pagination: {
-    //   current: 1,
-    //   pageSize: 10,
-    // },
   });
 
   const toggleSuccess = (() => {
@@ -51,7 +46,8 @@ export const Branch = observer((initialData) => {
   })
 
   useEffect(() => {
-    fetchData()
+    fetchData();
+    store.member.setPage(1);
   }, []);
 
 
@@ -168,6 +164,7 @@ export const Branch = observer((initialData) => {
       }
     ];
 
+
     return <div>
       <div style={{
         display: "flex",
@@ -183,11 +180,17 @@ export const Branch = observer((initialData) => {
           <Table
             size={"small"}
             rowKey={record => record.id}
-            dataSource={store.member.data}
+            dataSource={store.member.data.slice()}
             columns={columns}
             hasEmpty={true}
             bordered={true}
-            loading={store.member.isLoading}
+            pagination={{
+              total: store.member.maxLength
+            }}
+            onChange={(page) => {
+              store.member.setPage(page.current);
+            }}
+            current={store.member.currentPage}
             style={{ marginTop: 15 }}
           />
         </Col>
