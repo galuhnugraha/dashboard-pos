@@ -192,6 +192,7 @@ export const Branch = observer((initialData) => {
           <Table
             size={"small"}
             rowKey={record => record.id}
+            loading={store.member.isLoading}
             dataSource={store.member.data.slice()}
             columns={columns}
             hasEmpty={true}
