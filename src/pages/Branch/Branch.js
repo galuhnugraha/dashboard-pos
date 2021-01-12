@@ -48,7 +48,10 @@ export const Branch = observer((initialData) => {
   useEffect(() => {
     fetchData();
     store.member.setPage(1);
+    store.member.setCurrent(10);
   }, []);
+
+  const { Search } = Input;
 
 
   async function fetchData() {
@@ -164,6 +167,7 @@ export const Branch = observer((initialData) => {
       }
     ];
 
+    const onSearch = value => console.log(value);
 
     return <div>
       <div style={{
@@ -173,6 +177,14 @@ export const Branch = observer((initialData) => {
       }}>
         <Typography.Title level={5} style={{ marginTop: 8 }}>Branch</Typography.Title>
         <Button type="primary" onClick={addBranch}><PlusOutlined />Tambah Data</Button>
+      </div>
+      <div style={{
+        display: "flex",
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+      }}>
+        {/* <Typography.Title level={5} style={{ marginTop: 8 }}>Branch</Typography.Title> */}
+        <Search placeholder="Masukan Search guys" onSearch={onSearch} enterButton="search" style={{width: 200,marginTop: 25}}/>
       </div>
       <Row>
         <Col span={24}>
@@ -185,7 +197,7 @@ export const Branch = observer((initialData) => {
             hasEmpty={true}
             bordered={true}
             pagination={{
-              total: store.member.maxLength
+              total: store.member.maxLength,
             }}
             onChange={(page) => {
               store.member.setPage(page.current);

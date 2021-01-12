@@ -19,6 +19,13 @@ export class MemberStore {
     this.getAll();
   }
 
+  @action
+  setCurrent(current = 10) {
+    this.pageSize = current;
+    this.getAll();
+  }
+  
+
   // @action
   // getAll() {
   //   this.isLoading = true;
