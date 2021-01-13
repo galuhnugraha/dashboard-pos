@@ -175,15 +175,15 @@ export const Branch = observer((initialData) => {
         justifyContent: 'space-between'
       }}>
         <Typography.Title level={5} style={{ marginTop: 8 }}>Branch</Typography.Title>
-        <Button type="primary" onClick={addBranch}><PlusOutlined />Tambah Data</Button>
       </div>
       <div style={{
         display: "flex",
         flexDirection: 'row',
         justifyContent: 'space-between'
       }}>
+         <Button type="primary" onClick={addBranch} style={{marginTop: 25}}><PlusOutlined />Tambah Data</Button>
         {/* <Typography.Title level={5} style={{ marginTop: 8 }}>Branch</Typography.Title> */}
-        <Search placeholder="Masukan Search guys" onSearch={value => {
+        <Search placeholder="Masukan Search" onSearch={value => {
           console.log(value, 'value');
           store.member.selectedFilterValue = value;
           store.member.search(value);
@@ -191,7 +191,7 @@ export const Branch = observer((initialData) => {
           onChange={event => {
             console.log(event.target.value, 'value');
             store.member.selectedFilterValue = event.target.value;
-          }} enterButton="search" style={{ width: 200, marginTop: 25 }} />
+          }} enterButton style={{ width: 200, marginTop: 25 }} />
       </div>
       <Row>
         <Col span={24}>
