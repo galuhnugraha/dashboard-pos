@@ -10,11 +10,13 @@ import {
   Modal,
   Form,
   Input,
+  Upload
 } from 'antd';
 import {
   PlusOutlined,
   DeleteOutlined,
   EditOutlined,
+  UploadOutlined
 } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
 import { useStore } from "../../utils/useStores";
@@ -34,7 +36,8 @@ export const Branch = observer((initialData) => {
       phone: '',
       bdate: '',
       no: '',
-      password: ''
+      password: '',
+      photo: ''
     },
   });
 
@@ -59,12 +62,32 @@ export const Branch = observer((initialData) => {
   }
 
 
-  function editData(e) {
+
+  const changeImage = (info) => new Promise((result, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(info.file.originFileObj);
+    reader.onload = () => result(reader.result);
+    reader.onerror = error => reject(error);
+  })
+
+  // {
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(info.file.originFileObj);
+  //   return reader.onload = () => ()
+
+  // }
+
+  async function editData(e) {
     const data = {
       email: e.email,
       name: e.name,
       phone: e.phone,
+      photo: await changeImage(e.photo)
     }
+    console.log(data)
+    // console.log(await changeImage(e.photo))
+    // const image = changeImage(e.photo)
+    // console.log(image)
     if (e.isEdit) {
       store.member.updateMember(e.isEdit, data)
         .then(res => {
@@ -79,6 +102,7 @@ export const Branch = observer((initialData) => {
     }
   }
 
+
   const setEditMode = (value) => {
     setState(prevState => ({
       ...prevState,
@@ -90,6 +114,7 @@ export const Branch = observer((initialData) => {
       email: value.member_email,
       name: value.member_name,
       phone: value.member_phone,
+      photo: value.member_photo
     })
   }
 
@@ -280,6 +305,17 @@ export const Branch = observer((initialData) => {
             rules={[{ required: true, message: 'Please input your Username!' }]}
           >
             <Input />
+          </Form.Item>
+          <Form.Item
+            label="photo uploud"
+            name="photo"
+            size={'large'}
+          >
+            <Upload
+
+            >
+              <Button icon={<UploadOutlined />}>Upload</Button>
+            </Upload>
           </Form.Item>
         </Form>
       </div>
