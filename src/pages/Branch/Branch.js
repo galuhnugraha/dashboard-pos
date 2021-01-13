@@ -167,7 +167,6 @@ export const Branch = observer((initialData) => {
       }
     ];
 
-    const onSearch = value => console.log(value);
 
     return <div>
       <div style={{
@@ -184,7 +183,15 @@ export const Branch = observer((initialData) => {
         justifyContent: 'space-between'
       }}>
         {/* <Typography.Title level={5} style={{ marginTop: 8 }}>Branch</Typography.Title> */}
-        <Search placeholder="Masukan Search guys" onSearch={onSearch} enterButton="search" style={{ width: 200, marginTop: 25 }} />
+        <Search placeholder="Masukan Search guys" onSearch={value => {
+          console.log(value, 'value');
+          store.member.selectedFilterValue = value;
+          store.member.search(value);
+        }}
+          onChange={event => {
+            console.log(event.target.value, 'value');
+            store.member.selectedFilterValue = event.target.value;
+          }} enterButton="search" style={{ width: 200, marginTop: 25 }} />
       </div>
       <Row>
         <Col span={24}>
@@ -199,7 +206,7 @@ export const Branch = observer((initialData) => {
             bordered={true}
             pagination={{
               total: store.member.maxLength,
-              onShowSizeChange: (current,pageSize) => {
+              onShowSizeChange: (current, pageSize) => {
                 store.member.setCurrentPage(pageSize);
               }
             }}

@@ -9,6 +9,8 @@ export class MemberStore {
   @observable pageSize = 10;
   @observable maxLength = 0;
 
+  @observable selectedFilterValue = '';
+
   constructor(context) {
     this.context = context;
   }
@@ -17,6 +19,12 @@ export class MemberStore {
   setPage(page = 1) {
     this.currentPage = page;
     this.getAll();
+  }
+
+  @action
+  setSearch(page = 1) {
+    this.currentPage = page;
+    this.search();
   }
 
   @action
@@ -77,5 +85,16 @@ export class MemberStore {
         this.isLoading = false;
         throw err;
       });
+  }
+
+
+  @action
+  async search() {
+    const token = localStorage.getItem("token")
+    let filterValue = this.selectedFilterValue;
+
+    const data = await http.get(`/users/search?search=${filterValue}`).set({ 'authorization': `Bearer ${token}` });
+    this.data = data.body.data;
+    this.isLoading = false;
   }
 }
