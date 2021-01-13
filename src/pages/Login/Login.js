@@ -67,7 +67,7 @@ export const Login = observer(() => {
                         marginTop: '15vh',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        boxShadow: '0 0 20px  0  rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24)'
+                        boxShadow: '0 0 10px  0  rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.20)'
                     }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', marginBottom: 20 }}>
                             <img className={classes.logoFull} src={Logo} alt={Logo} />
