@@ -1,8 +1,10 @@
 import { http } from "../utils/http";
 import { action, observable } from 'mobx';
+import debounce from "lodash.debounce";
 
 export class MemberStore {
   @observable isLoading = false;
+  @observable isSearching = false;
   @observable data = [];
   @observable delete = [];
   @observable currentPage = 1;
@@ -14,6 +16,12 @@ export class MemberStore {
   constructor(context) {
     this.context = context;
   }
+
+  setPageDebounced = debounce((page) => {
+    this.setPage(page);
+  }, 500);
+
+
 
   @action
   setPage(page = 1) {
@@ -87,14 +95,28 @@ export class MemberStore {
       });
   }
 
-
   @action
   async search() {
-    const token = localStorage.getItem("token")
     let filterValue = this.selectedFilterValue;
+    const token = localStorage.getItem("token");
+    if(!filterValue) {
+       const data = await http.get(`/users/members`).set({ 'authorization': `Bearer ${token}` });
+       this.isLoading = false
+       return this.data = data.body.data
+    }
 
     const data = await http.get(`/users/search?search=${filterValue}`).set({ 'authorization': `Bearer ${token}` });
     this.data = data.body.data;
     this.isLoading = false;
   }
+
+  // @action
+  // async search() {
+  //   const token = localStorage.getItem("token")
+  //   let filterValue = this.selectedFilterValue;
+
+  //   const data = await http.get(`/users/search?search=${filterValue}`).set({ 'authorization': `Bearer ${token}` });
+  //   this.data = data.body.data;
+  //   this.isLoading = false;
+  // }
 }

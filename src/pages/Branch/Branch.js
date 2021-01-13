@@ -112,6 +112,15 @@ export const Branch = observer((initialData) => {
     confirm(id);
   }
 
+
+  const search = (event) => {
+    if (event.target.value === '') {
+      store.member.isSearching = false;
+    } else {
+      store.member.search(event.target.value);
+    }
+  }
+
   const addBranch = () => {
     history.push('/app/branch/add')
   }
@@ -181,17 +190,16 @@ export const Branch = observer((initialData) => {
         flexDirection: 'row',
         justifyContent: 'space-between'
       }}>
-         <Button type="primary" onClick={addBranch} style={{marginTop: 25}}><PlusOutlined />Tambah Data</Button>
+        <Button type="primary" onClick={addBranch} style={{ marginTop: 25 }}><PlusOutlined />Tambah Data</Button>
         {/* <Typography.Title level={5} style={{ marginTop: 8 }}>Branch</Typography.Title> */}
         <Search placeholder="Masukan Search" onSearch={value => {
-          console.log(value, 'value');
           store.member.selectedFilterValue = value;
           store.member.search(value);
         }}
           onChange={event => {
-            console.log(event.target.value, 'value');
             store.member.selectedFilterValue = event.target.value;
-          }} enterButton style={{ width: 200, marginTop: 25 }} />
+
+          }} enterButton style={{ width: 200, marginTop: 25 }} loading={store.member.isLoading} />
       </div>
       <Row>
         <Col span={24}>
