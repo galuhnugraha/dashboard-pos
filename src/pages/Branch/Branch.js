@@ -10,10 +10,12 @@ import {
   Modal,
   Form,
   Input,
+  Upload
 } from 'antd';
 import {
   PlusOutlined,
   DeleteOutlined,
+  UploadOutlined,
   EditOutlined,
 } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
@@ -57,13 +59,21 @@ export const Branch = observer((initialData) => {
   async function fetchData() {
     await store.member.getAll();
   }
+  
+  const changeImage = (info) => new Promise((result, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(info.file.originFileObj);
+    reader.onload = () => result(reader.result);
+    reader.onerror = error => reject(error);
+  })
 
 
-  function editData(e) {
+  async function editData(e) {
     const data = {
       email: e.email,
       name: e.name,
       phone: e.phone,
+      photo: await changeImage(e.photo)
     }
     if (e.isEdit) {
       store.member.updateMember(e.isEdit, data)
@@ -90,6 +100,7 @@ export const Branch = observer((initialData) => {
       email: value.member_email,
       name: value.member_name,
       phone: value.member_phone,
+      photo: value.member_photo
     })
   }
 
@@ -280,6 +291,17 @@ export const Branch = observer((initialData) => {
             rules={[{ required: true, message: 'Please input your Username!' }]}
           >
             <Input />
+          </Form.Item>
+          <Form.Item
+            label="photo uploud"
+            name="photo"
+            size={'large'}
+          >
+            <Upload
+
+            >
+              <Button icon={<UploadOutlined />}>Upload</Button>
+            </Upload>
           </Form.Item>
         </Form>
       </div>
