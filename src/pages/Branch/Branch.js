@@ -15,8 +15,8 @@ import {
 import {
   PlusOutlined,
   DeleteOutlined,
-  UploadOutlined,
   EditOutlined,
+  LoadingOutlined
 } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
 import { useStore } from "../../utils/useStores";
@@ -38,13 +38,15 @@ export const Branch = observer((initialData) => {
       no: '',
       password: ''
     },
+    loading: false,
+    // fileList: [],
+    imageUrl: ''
   });
 
   const toggleSuccess = (() => {
     setState({
       success: !state.success,
     });
-    console.log(state.success)
   })
 
   useEffect(() => {
@@ -55,11 +57,10 @@ export const Branch = observer((initialData) => {
 
   const { Search } = Input;
 
-
   async function fetchData() {
     await store.member.getAll();
   }
-  
+
   const changeImage = (info) => new Promise((result, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(info.file.originFileObj);
@@ -104,8 +105,7 @@ export const Branch = observer((initialData) => {
     })
   }
 
-  function cancel(e) {
-    console.log(e);
+  function cancel() {
     message.error('Pliss Jgn Hapus Data Saya ya , saya mohon');
   }
 
@@ -124,13 +124,12 @@ export const Branch = observer((initialData) => {
   }
 
 
-  const search = (event) => {
-    if (event.target.value === '') {
-      store.member.isSearching = false;
-    } else {
-      store.member.search(event.target.value);
-    }
-  }
+  const uploadButton = (
+    <div>
+      {state.loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </div>
+  );
 
   const addBranch = () => {
     history.push('/app/branch/add')
@@ -202,15 +201,29 @@ export const Branch = observer((initialData) => {
         justifyContent: 'space-between'
       }}>
         <Button type="primary" onClick={addBranch} style={{ marginTop: 25 }}><PlusOutlined />Tambah Data</Button>
-        {/* <Typography.Title level={5} style={{ marginTop: 8 }}>Branch</Typography.Title> */}
-        <Search placeholder="Masukan Search" onSearch={value => {
+        <Search
+          placeholder="input search text"
+          onSearch={(value) => {
+            store.member.selectedFilterValue = value;
+            store.member.setPage(1);
+            // store.member.search(value);
+          }}
+          onChange={event => {
+            store.member.selectedFilterValue = event.target.value;
+            store.member.setPageDebounced(event.target.value);
+          }} enterButton style={{ width: 200, marginTop: 25 }} 
+          loading={store.member.isLoading}
+          enterButton />
+
+        {/* <Search placeholder="Masukan Search" onSearch={value => {
           store.member.selectedFilterValue = value;
+          store.member.setPage(1);
           store.member.search(value);
         }}
           onChange={event => {
             store.member.selectedFilterValue = event.target.value;
-
-          }} enterButton style={{ width: 200, marginTop: 25 }} loading={store.member.isLoading} />
+            store.member.setPageDebounced(event.target.value);
+          }} enterButton style={{ width: 200, marginTop: 25 }} loading={store.member.isLoading} /> */}
       </div>
       <Row>
         <Col span={24}>
@@ -259,7 +272,7 @@ export const Branch = observer((initialData) => {
             editData(values);
           })
           .catch(info => {
-            console.log('Validate Failed:', info);
+            // console.log('Validate Failed:', info);
           });
       }}
     >
@@ -298,9 +311,11 @@ export const Branch = observer((initialData) => {
             size={'large'}
           >
             <Upload
-
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
             >
-              <Button icon={<UploadOutlined />}>Upload</Button>
+              {state.imageUrl ? <img src={state.imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
             </Upload>
           </Form.Item>
         </Form>

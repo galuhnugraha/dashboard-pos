@@ -18,7 +18,7 @@ export class MemberStore {
   }
 
   setPageDebounced = debounce((page) => {
-    this.setPage(page);
+    this.setSearch(page);
   }, 500);
 
 
@@ -99,12 +99,9 @@ export class MemberStore {
   async search() {
     let filterValue = this.selectedFilterValue;
     const token = localStorage.getItem("token");
-    if(!filterValue) {
-       const data = await http.get(`/users/members`).set({ 'authorization': `Bearer ${token}` });
-       this.isLoading = false
-       return this.data = data.body.data
+    if(filterValue === '') {
+       this.getAll();
     }
-
     const data = await http.get(`/users/search?search=${filterValue}`).set({ 'authorization': `Bearer ${token}` });
     this.data = data.body.data;
     this.isLoading = false;
