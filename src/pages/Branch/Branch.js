@@ -206,13 +206,12 @@ export const Branch = observer((initialData) => {
           onSearch={(value) => {
             store.member.selectedFilterValue = value;
             store.member.setPage(1);
-            // store.member.search(value);
+            store.member.search(value);
           }}
           onChange={event => {
             store.member.selectedFilterValue = event.target.value;
-            store.member.setPageDebounced(event.target.value);
+            store.member.setPageDebounced();
           }} enterButton style={{ width: 200, marginTop: 25 }} 
-          loading={store.member.isLoading}
           enterButton />
 
         {/* <Search placeholder="Masukan Search" onSearch={value => {
