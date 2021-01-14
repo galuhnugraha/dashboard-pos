@@ -20,13 +20,13 @@ import {
 import { useHistory } from 'react-router-dom';
 import { useStore } from "../../utils/useStores";
 import { observer } from "mobx-react-lite";
-
-
+import './style.css';
 
 export const Branch = observer((initialData) => {
   const store = useStore();
   let history = useHistory();
   const [form] = Form.useForm();
+  const [loading,setLoading] = useState(false);
   const [state, setState] = useState({
     success: false,
     form: {
@@ -61,6 +61,8 @@ export const Branch = observer((initialData) => {
 
 
 
+
+
   useEffect(() => {
     fetchData();
     store.member.setPage(1);
@@ -83,7 +85,7 @@ export const Branch = observer((initialData) => {
 
 
   async function editData(e) {
-
+    setLoading(true);
     const data = {
       email: e.email,
       name: e.name,
@@ -94,11 +96,13 @@ export const Branch = observer((initialData) => {
     if (e.isEdit) {
       store.member.updateMember(e.isEdit, data)
         .then(res => {
+          setLoading(false);
           message.success('Data Member Di Update!');
           toggleSuccess();
           fetchData();
         })
         .catch(err => {
+          setLoading(false);
           message.error(`Error on Updating Member, ${err.message}`);
           message.error(err.message);
         });
@@ -308,10 +312,12 @@ export const Branch = observer((initialData) => {
           <Form.Item
             label="Photo"
           >
-            <input type="file" id="files" onChange={changeImage} />
+            {/* <div>
+              <input type="file" id="files" onChange={changeImage} style={{background: 'gray',height: 80,width: 80}}/>
+            </div> */}
+            {imgData ? <img src={imgData} style={{width: 100,height: 100,marginBottom: 15,borderRadius: 8}}/> :  null}
+              <input type="file" id="files" onChange={changeImage} className="custom-file-upload" loading={true}/>
           </Form.Item>
-          <img src={imgData} style={{height: 80,width: 80}}/>
-          {/* <input type="file" id="files" onChange={changeImage} /> */}
         </Form>
       </div>
     </Modal>
