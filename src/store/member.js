@@ -22,6 +22,11 @@ export class MemberStore {
   }, 300);
 
 
+  @action
+  setSearch(page =1) {
+    this.currentPage = page;
+    this.search();
+  }
 
   @action
   setPage(page = 1) {

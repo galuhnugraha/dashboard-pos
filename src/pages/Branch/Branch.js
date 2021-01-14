@@ -111,7 +111,7 @@ export const Branch = observer((initialData) => {
       email: value.member_email,
       name: value.member_name,
       phone: value.member_phone,
-      // photo: value.member_photo
+      photo: value.member_photo
     })
   }
 
@@ -208,7 +208,9 @@ export const Branch = observer((initialData) => {
           onSearch={(value) => {
             store.member.selectedFilterValue = value;
             store.member.setPage(1);
+            store.member.search(value);
           }}
+          key={(row) => row.id}
           onChange={event => {
             store.member.selectedFilterValue = event.target.value;
             store.member.setPageDebounced();
@@ -315,7 +317,11 @@ export const Branch = observer((initialData) => {
               onChange={handleOnChange}
               listType="picture-card"
               fileList={defaultFileList}
-              beforeUpload={beforeUploadData}
+              // beforeUpload={beforeUploadData}
+              beforeUpload={(file) => {
+                setDefaultFileList([...defaultFileList,file]); 
+                return false;
+              }}
               className="image-upload-grid"
               showUploadList={true}
             >
