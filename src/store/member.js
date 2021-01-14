@@ -99,7 +99,7 @@ export class MemberStore {
   async search() {
     let filterValue = this.selectedFilterValue;
     const token = localStorage.getItem("token");
-    if(filterValue === '') {
+    if(!filterValue) {
        this.getAll();
     }
     const data = await http.get(`/users/search?search=${filterValue}`).set({ 'authorization': `Bearer ${token}` });

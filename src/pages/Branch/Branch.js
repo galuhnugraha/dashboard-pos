@@ -306,7 +306,7 @@ export const Branch = observer((initialData) => {
             <Input />
           </Form.Item>
           <Form.Item
-            label="photo uploud"
+            label="Photo Upload"
             name="photo"
             size={'large'}
           >
