@@ -45,11 +45,18 @@ export const Branch = observer((initialData) => {
     });
   })
 
-  const handleOnChange = ({ file, fileList, event }) => {
-    // console.log(file, fileList, event);
-    //Using Hooks to update the state to the current filelist
-    setDefaultFileList(fileList);
-    //filelist - [{uid: "-1",url:'Some url to image'}]
+  const [picture, setPicture] = useState(null);
+  const [imgData, setImgData] = useState(null);
+  const onChangePicture = e => {
+    if (e.target.files[0]) {
+      console.log("picture: ", e.target.files);
+      setPicture(e.target.files[0]);
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImgData(reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
   };
 
 
@@ -66,21 +73,24 @@ export const Branch = observer((initialData) => {
     await store.member.getAll();
   }
 
-  // const changeImage = (info) => new Promise((result, reject) => {
-  //   const reader = new FileReader();
-  //   reader.readAsDataURL(info.file.originFileObj);
-  //   reader.onload = () => result(reader.result);
-  //   reader.onerror = error => reject(error);
-  // })
+  const changeImage = (info) => new Promise((result, reject) => {
+    const data = info.target.files[0]
+    const reader = new FileReader();
+    reader.readAsDataURL(data);
+    reader.onload = () => result(setImgData(reader.result), reader.result);
+    reader.onerror = error => reject(error);
+  })
 
 
   async function editData(e) {
+
     const data = {
       email: e.email,
       name: e.name,
       phone: e.phone,
-      // photo: await changeImage(e.photo)
+      photo: imgData
     }
+
     if (e.isEdit) {
       store.member.updateMember(e.isEdit, data)
         .then(res => {
@@ -95,8 +105,8 @@ export const Branch = observer((initialData) => {
     }
   }
 
-  function beforeUploadData(file){
-    setDefaultFileList([...defaultFileList,file]); 
+  function beforeUploadData(file) {
+    setDefaultFileList([...defaultFileList, file]);
     return false;
   }
 
@@ -143,11 +153,13 @@ export const Branch = observer((initialData) => {
       {
         title: 'Member Email',
         dataIndex: 'member_email',
+        key: 'member_email',
         render: (text, record) => <span>{record.member_email}</span>,
       },
       {
         title: 'Member Name',
         dataIndex: 'member_name',
+        key: 'member_name',
         render: (text, record) => <span>{record.member_name}</span>,
         sorter: {
           compare: (a, b) => a.address - b.address,
@@ -157,6 +169,7 @@ export const Branch = observer((initialData) => {
       {
         title: 'Phone',
         dataIndex: 'member_phone',
+        key: 'member_phone',
         render: (text, record) => <span>{record.member_phone}</span>,
         sorter: {
           compare: (a, b) => a.member_phone - b.member_phone,
@@ -201,7 +214,7 @@ export const Branch = observer((initialData) => {
         display: "flex",
         flexDirection: 'row',
         justifyContent: 'space-between'
-      }}>
+      }} key={row => row.id}>
         <Button type="primary" onClick={addBranch} style={{ marginTop: 25 }}><PlusOutlined />Tambah Data</Button>
         <Search
           placeholder="input search text"
@@ -210,48 +223,33 @@ export const Branch = observer((initialData) => {
             store.member.setPage(1);
             store.member.search(value);
           }}
-          key={(row) => row.id}
           onChange={event => {
             store.member.selectedFilterValue = event.target.value;
             store.member.setPageDebounced();
           }} enterButton style={{ width: 200, marginTop: 25 }}
           enterButton />
-
-        {/* <Search placeholder="Masukan Search" onSearch={value => {
-          store.member.selectedFilterValue = value;
-          store.member.setPage(1);
-          store.member.search(value);
-        }}
-          onChange={event => {
-            store.member.selectedFilterValue = event.target.value;
-            store.member.setPageDebounced(event.target.value);
-          }} enterButton style={{ width: 200, marginTop: 25 }} loading={store.member.isLoading} /> */}
       </div>
-      <Row>
-        <Col span={24}>
-          {renderModal()}
-          <Table
-            size={"small"}
-            rowKey={record => record.id}
-            loading={store.member.isLoading}
-            dataSource={store.member.data.slice()}
-            columns={columns}
-            hasEmpty={true}
-            bordered={true}
-            pagination={{
-              total: store.member.maxLength,
-              onShowSizeChange: (current, pageSize) => {
-                store.member.setCurrentPage(pageSize);
-              }
-            }}
-            onChange={(page) => {
-              store.member.setPage(page.current);
-            }}
-            current={store.member.currentPage}
-            style={{ marginTop: 15 }}
-          />
-        </Col>
-      </Row>
+      {renderModal()}
+      <Table
+        size={"small"}
+        rowKey={record => record.id}
+        loading={store.member.isLoading}
+        dataSource={store.member.data.slice()}
+        columns={columns}
+        hasEmpty={true}
+        bordered={true}
+        pagination={{
+          total: store.member.maxLength,
+          onShowSizeChange: (current, pageSize) => {
+            store.member.setCurrentPage(pageSize);
+          }
+        }}
+        onChange={(page) => {
+          store.member.setPage(page.current);
+        }}
+        current={store.member.currentPage}
+        style={{ marginTop: 15 }}
+      />
     </div>
   }
 
@@ -308,26 +306,12 @@ export const Branch = observer((initialData) => {
             <Input />
           </Form.Item>
           <Form.Item
-            label="Photo Upload"
-            name="photo"
-            size={'large'}
+            label="Photo"
           >
-            <Upload
-              accept="image/*"
-              onChange={handleOnChange}
-              listType="picture-card"
-              fileList={defaultFileList}
-              // beforeUpload={beforeUploadData}
-              beforeUpload={(file) => {
-                setDefaultFileList([...defaultFileList,file]); 
-                return false;
-              }}
-              className="image-upload-grid"
-              showUploadList={true}
-            >
-              {defaultFileList.length >= 1 ? null : <div>Upload Button</div>}
-            </Upload>
+            <input type="file" id="files" onChange={changeImage} />
           </Form.Item>
+          <img src={imgData} style={{height: 80,width: 80}}/>
+          {/* <input type="file" id="files" onChange={changeImage} /> */}
         </Form>
       </div>
     </Modal>
