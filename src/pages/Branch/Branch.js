@@ -10,13 +10,12 @@ import {
   Modal,
   Form,
   Input,
-  Upload
+  Upload,
 } from 'antd';
 import {
   PlusOutlined,
   DeleteOutlined,
   EditOutlined,
-  LoadingOutlined
 } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
 import { useStore } from "../../utils/useStores";
@@ -38,16 +37,22 @@ export const Branch = observer((initialData) => {
       no: '',
       password: ''
     },
-    loading: false,
-    // fileList: [],
-    imageUrl: ''
   });
-
+  const [defaultFileList, setDefaultFileList] = useState([]);
   const toggleSuccess = (() => {
     setState({
       success: !state.success,
     });
   })
+
+  const handleOnChange = ({ file, fileList, event }) => {
+    // console.log(file, fileList, event);
+    //Using Hooks to update the state to the current filelist
+    setDefaultFileList(fileList);
+    //filelist - [{uid: "-1",url:'Some url to image'}]
+  };
+
+
 
   useEffect(() => {
     fetchData();
@@ -61,12 +66,12 @@ export const Branch = observer((initialData) => {
     await store.member.getAll();
   }
 
-  const changeImage = (info) => new Promise((result, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(info.file.originFileObj);
-    reader.onload = () => result(reader.result);
-    reader.onerror = error => reject(error);
-  })
+  // const changeImage = (info) => new Promise((result, reject) => {
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(info.file.originFileObj);
+  //   reader.onload = () => result(reader.result);
+  //   reader.onerror = error => reject(error);
+  // })
 
 
   async function editData(e) {
@@ -74,7 +79,7 @@ export const Branch = observer((initialData) => {
       email: e.email,
       name: e.name,
       phone: e.phone,
-      photo: await changeImage(e.photo)
+      // photo: await changeImage(e.photo)
     }
     if (e.isEdit) {
       store.member.updateMember(e.isEdit, data)
@@ -90,6 +95,11 @@ export const Branch = observer((initialData) => {
     }
   }
 
+  function beforeUploadData(file){
+    setDefaultFileList([...defaultFileList,file]); 
+    return false;
+  }
+
   const setEditMode = (value) => {
     setState(prevState => ({
       ...prevState,
@@ -101,7 +111,7 @@ export const Branch = observer((initialData) => {
       email: value.member_email,
       name: value.member_name,
       phone: value.member_phone,
-      photo: value.member_photo
+      // photo: value.member_photo
     })
   }
 
@@ -122,14 +132,6 @@ export const Branch = observer((initialData) => {
   const deleteClick = (id) => {
     confirm(id);
   }
-
-
-  const uploadButton = (
-    <div>
-      {state.loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
 
   const addBranch = () => {
     history.push('/app/branch/add')
@@ -206,12 +208,11 @@ export const Branch = observer((initialData) => {
           onSearch={(value) => {
             store.member.selectedFilterValue = value;
             store.member.setPage(1);
-            store.member.search(value);
           }}
           onChange={event => {
             store.member.selectedFilterValue = event.target.value;
             store.member.setPageDebounced();
-          }} enterButton style={{ width: 200, marginTop: 25 }} 
+          }} enterButton style={{ width: 200, marginTop: 25 }}
           enterButton />
 
         {/* <Search placeholder="Masukan Search" onSearch={value => {
@@ -310,11 +311,15 @@ export const Branch = observer((initialData) => {
             size={'large'}
           >
             <Upload
-              name="avatar"
+              accept="image/*"
+              onChange={handleOnChange}
               listType="picture-card"
-              className="avatar-uploader"
+              fileList={defaultFileList}
+              beforeUpload={beforeUploadData}
+              className="image-upload-grid"
+              showUploadList={true}
             >
-              {state.imageUrl ? <img src={state.imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+              {defaultFileList.length >= 1 ? null : <div>Upload Button</div>}
             </Upload>
           </Form.Item>
         </Form>

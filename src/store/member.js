@@ -19,7 +19,7 @@ export class MemberStore {
 
   setPageDebounced = debounce((page) => {
     this.setSearch(page);
-  }, 500);
+  }, 300);
 
 
 
@@ -27,12 +27,6 @@ export class MemberStore {
   setPage(page = 1) {
     this.currentPage = page;
     this.getAll();
-  }
-
-  @action
-  setSearch(page = 1) {
-    this.currentPage = page;
-    this.search();
   }
 
   @action
