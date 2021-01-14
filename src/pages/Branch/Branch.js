@@ -316,7 +316,7 @@ export const Branch = observer((initialData) => {
               <input type="file" id="files" onChange={changeImage} style={{background: 'gray',height: 80,width: 80}}/>
             </div> */}
             {imgData ? <img src={imgData} style={{width: 100,height: 100,marginBottom: 15,borderRadius: 8}}/> :  null}
-              <input type="file" id="files" onChange={changeImage} className="custom-file-upload" loading={true}/>
+              <input type="file" id="files" onChange={changeImage} className="custom-file-upload" />
           </Form.Item>
         </Form>
       </div>
