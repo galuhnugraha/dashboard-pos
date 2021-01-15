@@ -10,23 +10,45 @@ import {
   Modal,
   Form,
   Input,
-  Upload
+  Upload,
+  Image
 } from 'antd';
 import {
   PlusOutlined,
   DeleteOutlined,
   EditOutlined,
+  LoadingOutlined,
   UploadOutlined
 } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
 import { useStore } from "../../utils/useStores";
 import { observer } from "mobx-react-lite";
 
+function getBase64(img, callback) {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result));
+  reader.readAsDataURL(img);
+}
+
+function beforeUpload(file) {
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  if (!isJpgOrPng) {
+    message.error('You can only upload JPG/PNG file!');
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error('Image must smaller than 2MB!');
+  }
+  return isJpgOrPng && isLt2M;
+}
+
 
 
 export const Branch = observer((initialData) => {
   const store = useStore();
   let history = useHistory();
+  const [loading, setloading] = useState(true)
+  const [imageUrl, setImageUrl] = useState('')
   const [form] = Form.useForm();
   const [state, setState] = useState({
     success: false,
@@ -39,13 +61,17 @@ export const Branch = observer((initialData) => {
       password: '',
       photo: ''
     },
+    loading: false,
+    // fileList: [],
+    imageUrl: ''
   });
+
+  const [image, setImage] = useState('')
 
   const toggleSuccess = (() => {
     setState({
       success: !state.success,
     });
-    console.log(state.success)
   })
 
   useEffect(() => {
@@ -56,12 +82,9 @@ export const Branch = observer((initialData) => {
 
   const { Search } = Input;
 
-
   async function fetchData() {
     await store.member.getAll();
   }
-
-
 
   const changeImage = (info) => new Promise((result, reject) => {
     const reader = new FileReader();
@@ -70,24 +93,39 @@ export const Branch = observer((initialData) => {
     reader.onerror = error => reject(error);
   })
 
-  // {
+  // const viewImage = (file) => new Promise((resolve, reject) => {
   //   const reader = new FileReader();
-  //   reader.readAsDataURL(info.file.originFileObj);
-  //   return reader.onload = () => ()
+  //   reader.
+  // }) 
 
-  // }
+  async function viewImage(info) {
+    setImage(image = await changeImage(info))
+  }
+
+
+  const handleChange = info => {
+    if (info.file.status === 'uploading') {
+      setloading({ loading: true });
+      return;
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      getBase64(info.file.originFileObj, imageUrl =>
+        setImageUrl(imageUrl),
+        setloading(loading = false),
+      );
+    }
+  };
 
   async function editData(e) {
+    // setImage = e.photo
     const data = {
       email: e.email,
       name: e.name,
       phone: e.phone,
       photo: await changeImage(e.photo)
     }
-    console.log(data)
-    // console.log(await changeImage(e.photo))
-    // const image = changeImage(e.photo)
-    // console.log(image)
+
     if (e.isEdit) {
       store.member.updateMember(e.isEdit, data)
         .then(res => {
@@ -118,8 +156,7 @@ export const Branch = observer((initialData) => {
     })
   }
 
-  function cancel(e) {
-    console.log(e);
+  function cancel() {
     message.error('Pliss Jgn Hapus Data Saya ya , saya mohon');
   }
 
@@ -138,13 +175,12 @@ export const Branch = observer((initialData) => {
   }
 
 
-  const search = (event) => {
-    if (event.target.value === '') {
-      store.member.isSearching = false;
-    } else {
-      store.member.search(event.target.value);
-    }
-  }
+  const uploadButton = (
+    <div>
+      {state.loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </div>
+  );
 
   const addBranch = () => {
     history.push('/app/branch/add')
@@ -180,7 +216,9 @@ export const Branch = observer((initialData) => {
         title: 'Action',
         key: 'action',
         render: (text, record) => (
-          <span>
+
+
+          < span >
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <div>
                 <EditOutlined onClick={() => {
@@ -196,7 +234,7 @@ export const Branch = observer((initialData) => {
                 </div>
               </Popconfirm>
             </div>
-          </span>
+          </span >
         ),
       }
     ];
@@ -216,15 +254,28 @@ export const Branch = observer((initialData) => {
         justifyContent: 'space-between'
       }}>
         <Button type="primary" onClick={addBranch} style={{ marginTop: 25 }}><PlusOutlined />Tambah Data</Button>
-        {/* <Typography.Title level={5} style={{ marginTop: 8 }}>Branch</Typography.Title> */}
-        <Search placeholder="Masukan Search" onSearch={value => {
+        <Search
+          placeholder="input search text"
+          onSearch={(value) => {
+            store.member.selectedFilterValue = value;
+            store.member.setPage(1);
+            store.member.search(value);
+          }}
+          onChange={event => {
+            store.member.selectedFilterValue = event.target.value;
+            store.member.setPageDebounced();
+          }} enterButton style={{ width: 200, marginTop: 25 }}
+          enterButton />
+
+        {/* <Search placeholder="Masukan Search" onSearch={value => {
           store.member.selectedFilterValue = value;
+          store.member.setPage(1);
           store.member.search(value);
         }}
           onChange={event => {
             store.member.selectedFilterValue = event.target.value;
-
-          }} enterButton style={{ width: 200, marginTop: 25 }} loading={store.member.isLoading} />
+            store.member.setPageDebounced(event.target.value);
+          }} enterButton style={{ width: 200, marginTop: 25 }} loading={store.member.isLoading} /> */}
       </div>
       <Row>
         <Col span={24}>
@@ -255,6 +306,11 @@ export const Branch = observer((initialData) => {
   }
 
   function renderModal() {
+    const uploadButton = (
+      <div>
+        {loading ? <LoadingOutlined /> : <PlusOutlined />}
+        <div style={{ marginTop: 8 }}>Upload</div>
+      </div>)
     return <Modal visible={state.success} closable={false} confirmLoading={false} destroyOnClose={true}
       title="Update Member"
       okText="Save"
@@ -273,7 +329,7 @@ export const Branch = observer((initialData) => {
             editData(values);
           })
           .catch(info => {
-            console.log('Validate Failed:', info);
+            // console.log('Validate Failed:', info);
           });
       }}
     >
@@ -307,14 +363,30 @@ export const Branch = observer((initialData) => {
             <Input />
           </Form.Item>
           <Form.Item
-            label="photo uploud"
+            label="image"
+            name="image"
+            size={'large'}
+          >
+            <Image
+              src={image}
+            >
+            </Image>
+          </Form.Item>
+          <Form.Item
+            label="Photo Upload"
             name="photo"
             size={'large'}
           >
             <Upload
-
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList={false}
+              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              beforeUpload={beforeUpload}
+              onChange={handleChange}
             >
-              <Button icon={<UploadOutlined />}>Upload</Button>
+              {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
             </Upload>
           </Form.Item>
         </Form>
