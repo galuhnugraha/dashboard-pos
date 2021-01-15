@@ -86,10 +86,17 @@ export const App = (props) => {
 
   const menu = (
     <Menu>
-      <Menu.Item key="0" onClick={logout}>
-        <a style={{ fontSize: 11 }}>Logout</a>
+      <Menu.Item key="0">
+        <button onClick={logout}
+          style={{
+            backgroundColor: "white",
+            border: "none",
+            textAlign: "center",
+            textDecoration: "none"
+          }}
+        >Logout</button>
       </Menu.Item>
-    </Menu>
+    </Menu >
   );
 
 
@@ -343,10 +350,10 @@ export const App = (props) => {
             </SubMenu>
             <SubMenu key="sub8" title="Manajemen Vendor" icon={<TabletOutlined style={{ fontSize: 18 }} />}>
               <Menu.Item key="32">
-                  <p>Daftar Vendor</p>
+                <p>Daftar Vendor</p>
               </Menu.Item>
               <Menu.Item key="33">
-                  <p>Tambah Vendor</p>
+                <p>Tambah Vendor</p>
               </Menu.Item>
             </SubMenu>
             <Menu.Item key="34">

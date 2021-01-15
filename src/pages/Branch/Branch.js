@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Col,
-  Row,
   Button,
   Table,
   Typography,
@@ -10,7 +8,6 @@ import {
   Modal,
   Form,
   Input,
-  Upload,
 } from 'antd';
 import {
   PlusOutlined,
@@ -23,10 +20,13 @@ import { observer } from "mobx-react-lite";
 import './style.css';
 
 export const Branch = observer((initialData) => {
+
   const store = useStore();
   let history = useHistory();
+
   const [form] = Form.useForm();
-  const [loading,setLoading] = useState(false);
+  const [imgData, setImgData] = useState(null);
+
   const [state, setState] = useState({
     success: false,
     form: {
@@ -38,35 +38,20 @@ export const Branch = observer((initialData) => {
       password: ''
     },
   });
-  const [defaultFileList, setDefaultFileList] = useState([]);
+
   const toggleSuccess = (() => {
     setState({
       success: !state.success,
     });
   })
 
-  const [picture, setPicture] = useState(null);
-  const [imgData, setImgData] = useState(null);
-  const onChangePicture = e => {
-    if (e.target.files[0]) {
-      console.log("picture: ", e.target.files);
-      setPicture(e.target.files[0]);
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        setImgData(reader.result);
-      });
-      reader.readAsDataURL(e.target.files[0]);
-    }
-  };
-
-
-
 
 
   useEffect(() => {
-    fetchData();
+    store.member.getAll()
     store.member.setPage(1);
     store.member.setCurrentPage(10);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { Search } = Input;
@@ -85,7 +70,6 @@ export const Branch = observer((initialData) => {
 
 
   async function editData(e) {
-    setLoading(true);
     const data = {
       email: e.email,
       name: e.name,
@@ -96,23 +80,18 @@ export const Branch = observer((initialData) => {
     if (e.isEdit) {
       store.member.updateMember(e.isEdit, data)
         .then(res => {
-          setLoading(false);
           message.success('Data Member Di Update!');
           toggleSuccess();
           fetchData();
         })
         .catch(err => {
-          setLoading(false);
           message.error(`Error on Updating Member, ${err.message}`);
           message.error(err.message);
         });
     }
   }
 
-  function beforeUploadData(file) {
-    setDefaultFileList([...defaultFileList, file]);
-    return false;
-  }
+
 
   const setEditMode = (value) => {
     setState(prevState => ({
@@ -230,13 +209,12 @@ export const Branch = observer((initialData) => {
           onChange={event => {
             store.member.selectedFilterValue = event.target.value;
             store.member.setPageDebounced();
-          }} enterButton style={{ width: 200, marginTop: 25 }}
-          enterButton />
+          }} enterButton style={{ width: 200, marginTop: 25 }} />
       </div>
       {renderModal()}
       <Table
         size={"small"}
-        rowKey={record => record.id}
+        rowKey={record => record.name}
         loading={store.member.isLoading}
         dataSource={store.member.data.slice()}
         columns={columns}
@@ -315,8 +293,8 @@ export const Branch = observer((initialData) => {
             {/* <div>
               <input type="file" id="files" onChange={changeImage} style={{background: 'gray',height: 80,width: 80}}/>
             </div> */}
-            {imgData ? <img src={imgData} style={{width: 100,height: 100,marginBottom: 15,borderRadius: 8}}/> :  null}
-              <input type="file" id="files" onChange={changeImage} className="custom-file-upload" />
+            {imgData ? <img src={imgData} alt="avatar" style={{ width: 100, height: 100, marginBottom: 15, borderRadius: 8 }} /> : null}
+            <input type="file" id="files" onChange={changeImage} className="custom-file-upload" />
           </Form.Item>
         </Form>
       </div>
