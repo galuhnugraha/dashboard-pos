@@ -214,7 +214,7 @@ export const Branch = observer((initialData) => {
       {renderModal()}
       <Table
         size={"small"}
-        rowKey={record => record.name}
+        rowKey={record => record.member_email}
         loading={store.member.isLoading}
         dataSource={store.member.data.slice()}
         columns={columns}
