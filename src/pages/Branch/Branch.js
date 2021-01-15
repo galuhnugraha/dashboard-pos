@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Col,
-  Row,
   Button,
   Table,
   Typography,
@@ -10,46 +8,25 @@ import {
   Modal,
   Form,
   Input,
-  Upload,
-  Image
 } from 'antd';
 import {
   PlusOutlined,
   DeleteOutlined,
   EditOutlined,
-  LoadingOutlined,
-  UploadOutlined
 } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
 import { useStore } from "../../utils/useStores";
 import { observer } from "mobx-react-lite";
-
-function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
-
-function beforeUpload(file) {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-  if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG file!');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!');
-  }
-  return isJpgOrPng && isLt2M;
-}
-
-
+import './style.css';
 
 export const Branch = observer((initialData) => {
+
   const store = useStore();
   let history = useHistory();
-  const [loading, setloading] = useState(true)
-  const [imageUrl, setImageUrl] = useState('')
+
   const [form] = Form.useForm();
+  const [imgData, setImgData] = useState(null);
+
   const [state, setState] = useState({
     success: false,
     form: {
@@ -58,15 +35,9 @@ export const Branch = observer((initialData) => {
       phone: '',
       bdate: '',
       no: '',
-      password: '',
-      photo: ''
+      password: ''
     },
-    loading: false,
-    // fileList: [],
-    imageUrl: ''
   });
-
-  const [image, setImage] = useState('')
 
   const toggleSuccess = (() => {
     setState({
@@ -74,10 +45,13 @@ export const Branch = observer((initialData) => {
     });
   })
 
+
+
   useEffect(() => {
-    fetchData();
+    store.member.getAll()
     store.member.setPage(1);
     store.member.setCurrentPage(10);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { Search } = Input;
@@ -87,43 +61,20 @@ export const Branch = observer((initialData) => {
   }
 
   const changeImage = (info) => new Promise((result, reject) => {
+    const data = info.target.files[0]
     const reader = new FileReader();
-    reader.readAsDataURL(info.file.originFileObj);
-    reader.onload = () => result(reader.result);
+    reader.readAsDataURL(data);
+    reader.onload = () => result(setImgData(reader.result), reader.result);
     reader.onerror = error => reject(error);
   })
 
-  // const viewImage = (file) => new Promise((resolve, reject) => {
-  //   const reader = new FileReader();
-  //   reader.
-  // }) 
-
-  async function viewImage(info) {
-    setImage(image = await changeImage(info))
-  }
-
-
-  const handleChange = info => {
-    if (info.file.status === 'uploading') {
-      setloading({ loading: true });
-      return;
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl =>
-        setImageUrl(imageUrl),
-        setloading(loading = false),
-      );
-    }
-  };
 
   async function editData(e) {
-    // setImage = e.photo
     const data = {
       email: e.email,
       name: e.name,
       phone: e.phone,
-      photo: await changeImage(e.photo)
+      photo: imgData
     }
 
     if (e.isEdit) {
@@ -139,6 +90,7 @@ export const Branch = observer((initialData) => {
         });
     }
   }
+
 
 
   const setEditMode = (value) => {
@@ -174,14 +126,6 @@ export const Branch = observer((initialData) => {
     confirm(id);
   }
 
-
-  const uploadButton = (
-    <div>
-      {state.loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
-
   const addBranch = () => {
     history.push('/app/branch/add')
   }
@@ -192,11 +136,13 @@ export const Branch = observer((initialData) => {
       {
         title: 'Member Email',
         dataIndex: 'member_email',
+        key: 'member_email',
         render: (text, record) => <span>{record.member_email}</span>,
       },
       {
         title: 'Member Name',
         dataIndex: 'member_name',
+        key: 'member_name',
         render: (text, record) => <span>{record.member_name}</span>,
         sorter: {
           compare: (a, b) => a.address - b.address,
@@ -206,6 +152,7 @@ export const Branch = observer((initialData) => {
       {
         title: 'Phone',
         dataIndex: 'member_phone',
+        key: 'member_phone',
         render: (text, record) => <span>{record.member_phone}</span>,
         sorter: {
           compare: (a, b) => a.member_phone - b.member_phone,
@@ -216,9 +163,7 @@ export const Branch = observer((initialData) => {
         title: 'Action',
         key: 'action',
         render: (text, record) => (
-
-
-          < span >
+          <span>
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <div>
                 <EditOutlined onClick={() => {
@@ -234,7 +179,7 @@ export const Branch = observer((initialData) => {
                 </div>
               </Popconfirm>
             </div>
-          </span >
+          </span>
         ),
       }
     ];
@@ -252,7 +197,7 @@ export const Branch = observer((initialData) => {
         display: "flex",
         flexDirection: 'row',
         justifyContent: 'space-between'
-      }}>
+      }} key={row => row.id}>
         <Button type="primary" onClick={addBranch} style={{ marginTop: 25 }}><PlusOutlined />Tambah Data</Button>
         <Search
           placeholder="input search text"
@@ -264,53 +209,33 @@ export const Branch = observer((initialData) => {
           onChange={event => {
             store.member.selectedFilterValue = event.target.value;
             store.member.setPageDebounced();
-          }} enterButton style={{ width: 200, marginTop: 25 }}
-          enterButton />
-
-        {/* <Search placeholder="Masukan Search" onSearch={value => {
-          store.member.selectedFilterValue = value;
-          store.member.setPage(1);
-          store.member.search(value);
-        }}
-          onChange={event => {
-            store.member.selectedFilterValue = event.target.value;
-            store.member.setPageDebounced(event.target.value);
-          }} enterButton style={{ width: 200, marginTop: 25 }} loading={store.member.isLoading} /> */}
+          }} enterButton style={{ width: 200, marginTop: 25 }} />
       </div>
-      <Row>
-        <Col span={24}>
-          {renderModal()}
-          <Table
-            size={"small"}
-            rowKey={record => record.id}
-            loading={store.member.isLoading}
-            dataSource={store.member.data.slice()}
-            columns={columns}
-            hasEmpty={true}
-            bordered={true}
-            pagination={{
-              total: store.member.maxLength,
-              onShowSizeChange: (current, pageSize) => {
-                store.member.setCurrentPage(pageSize);
-              }
-            }}
-            onChange={(page) => {
-              store.member.setPage(page.current);
-            }}
-            current={store.member.currentPage}
-            style={{ marginTop: 15 }}
-          />
-        </Col>
-      </Row>
+      {renderModal()}
+      <Table
+        size={"small"}
+        rowKey={record => record.name}
+        loading={store.member.isLoading}
+        dataSource={store.member.data.slice()}
+        columns={columns}
+        hasEmpty={true}
+        bordered={true}
+        pagination={{
+          total: store.member.maxLength,
+          onShowSizeChange: (current, pageSize) => {
+            store.member.setCurrentPage(pageSize);
+          }
+        }}
+        onChange={(page) => {
+          store.member.setPage(page.current);
+        }}
+        current={store.member.currentPage}
+        style={{ marginTop: 15 }}
+      />
     </div>
   }
 
   function renderModal() {
-    const uploadButton = (
-      <div>
-        {loading ? <LoadingOutlined /> : <PlusOutlined />}
-        <div style={{ marginTop: 8 }}>Upload</div>
-      </div>)
     return <Modal visible={state.success} closable={false} confirmLoading={false} destroyOnClose={true}
       title="Update Member"
       okText="Save"
@@ -363,31 +288,13 @@ export const Branch = observer((initialData) => {
             <Input />
           </Form.Item>
           <Form.Item
-            label="image"
-            name="image"
-            size={'large'}
+            label="Photo"
           >
-            <Image
-              src={image}
-            >
-            </Image>
-          </Form.Item>
-          <Form.Item
-            label="Photo Upload"
-            name="photo"
-            size={'large'}
-          >
-            <Upload
-              name="avatar"
-              listType="picture-card"
-              className="avatar-uploader"
-              showUploadList={false}
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              beforeUpload={beforeUpload}
-              onChange={handleChange}
-            >
-              {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-            </Upload>
+            {/* <div>
+              <input type="file" id="files" onChange={changeImage} style={{background: 'gray',height: 80,width: 80}}/>
+            </div> */}
+            {imgData ? <img src={imgData} alt="avatar" style={{ width: 100, height: 100, marginBottom: 15, borderRadius: 8 }} /> : null}
+            <input type="file" id="files" onChange={changeImage} className="custom-file-upload" />
           </Form.Item>
         </Form>
       </div>

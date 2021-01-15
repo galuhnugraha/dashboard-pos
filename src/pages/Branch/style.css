@@ -1,5 +1,11 @@
-@media (min-width: 768px) {
-    .ant-table-thead > tr > th,
-    .ant-table-tbody > tr > td {
-    margin-top: 100px;
-}}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+img:hover {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+  }
