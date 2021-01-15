@@ -18,6 +18,7 @@ import { useHistory } from 'react-router-dom';
 import { useStore } from "../../utils/useStores";
 import { observer } from "mobx-react-lite";
 import './style.css';
+import xImg from "./xImg.jpeg"
 
 export const Branch = observer((initialData) => {
 
@@ -26,6 +27,7 @@ export const Branch = observer((initialData) => {
 
   const [form] = Form.useForm();
   const [imgData, setImgData] = useState(null);
+
 
   const [state, setState] = useState({
     success: false,
@@ -293,7 +295,8 @@ export const Branch = observer((initialData) => {
             {/* <div>
               <input type="file" id="files" onChange={changeImage} style={{background: 'gray',height: 80,width: 80}}/>
             </div> */}
-            {imgData ? <img src={imgData} alt="avatar" style={{ width: 100, height: 100, marginBottom: 15, borderRadius: 8 }} /> : null}
+            {imgData ? <img src={imgData} alt="avatar" style={{ width: 100, height: 100, marginBottom: 15, borderRadius: 8 }} /> :
+              <img src={xImg} alt="avatar" style={{ width: 100, height: 100, marginBottom: 15, borderRadius: 8 }} />}
             <input type="file" id="files" onChange={changeImage} className="custom-file-upload" />
           </Form.Item>
         </Form>
