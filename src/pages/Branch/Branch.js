@@ -204,7 +204,7 @@ export const Branch = observer((initialData) => {
           onSearch={(value) => {
             store.member.selectedFilterValue = value;
             store.member.setPage(1);
-            store.member.search(value);
+            // store.member.search(value);
           }}
           onChange={event => {
             store.member.selectedFilterValue = event.target.value;
@@ -214,7 +214,7 @@ export const Branch = observer((initialData) => {
       {renderModal()}
       <Table
         size={"small"}
-        rowKey={record => record.name}
+        rowKey={record => record.member_email}
         loading={store.member.isLoading}
         dataSource={store.member.data.slice()}
         columns={columns}
