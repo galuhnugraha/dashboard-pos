@@ -27,6 +27,7 @@ import {
 import { createUseStyles } from "react-jss";
 import { Link, useHistory } from "react-router-dom";
 import { useStore } from "../../utils/useStores";
+import {observer} from "mobx-react-lite";
 import Logo from '../../assets/images/logo.png';
 
 const { Header, Content, Sider } = Layout;
@@ -72,10 +73,10 @@ const useStyles = createUseStyles({
 });
 
 
-export const App = (props) => {
+export const App = observer((props) => {
   const [collapsed, setCollapsed] = useState(false);
-  const store = useStore();
   let history = useHistory();
+  const store = useStore();
 
   const logout = () => {
     store.auth.logout().then((res) => {
@@ -399,7 +400,7 @@ export const App = (props) => {
           style={{
             margin: '45px 16px',
             padding: 24,
-            background: '#fff',
+            backgroundColor: '#fff',
             height: 'calc(100vh - 64px)',
           }}
         >
@@ -408,4 +409,4 @@ export const App = (props) => {
       </Layout>
     </Layout>
   );
-};
+});

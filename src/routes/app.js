@@ -1,5 +1,5 @@
-import React from "react";
-import { Redirect, Route} from "react-router-dom";
+import React, { Suspense } from "react";
+import { Route, Redirect } from "react-router-dom";
 import { Payment } from "../pages/Payment/Payment";
 import { Branch } from "../pages/Branch/Branch";
 import { Dashboard } from "../pages/Dashboard/Dashboard";
@@ -40,125 +40,129 @@ import { BranchAdd } from "../pages/Branch/BranchAdd";
 import { AnimatedSwitch } from "react-router-transition";
 
 export const AppRoutes = () => {
-  return <AnimatedSwitch
-    atEnter={{ opacity: 0 }}
-    atLeave={{ opacity: 0 }}
-    atActive={{ opacity: 1 }}
-    className="switch-wrapper-app"
-  >
-    <Route path="/app" exact>
-      <Redirect to={"/app/home"} />
-    </Route>
-    <Route path="/app/home" exact>
-      <Dashboard />
-    </Route>
-    <Route path="/app/subscription" exact>
-      <Subscription />
-    </Route>
-    <Route path="/app/branch" exact>
-      <Branch />
-    </Route>
-    <Route path="/app/branch/qris" exact>
-      <Payment />
-    </Route>
-    <Route path="/app/branch/machines" exact>
-      <Machine />
-    </Route>
-    <Route path="/app/category" exact>
-      <Category />
-    </Route>
-    <Route path="/app/branch/join-akufood" exact>
-      <AkuFood />
-    </Route>
-    <Route path="/app/report/all" exact>
-      <AllTransaksi />
-    </Route>
-    <Route path="/app/report/summary" exact>
-      <RangkumanTransaksi />
-    </Route>
-    <Route path="/app/report/qris" exact>
-      <Qris />
-    </Route>
-    <Route path="/app/report/akufood" exact>
-      <TransaksiAkuFood />
-    </Route>
-    <Route path="/app/report/sales-item" exact>
-      <PenjualanItem />
-    </Route>
-    <Route path="/app/report/hours" exact>
-      <TransaksiPerJam />
-    </Route>
-    <Route path="/app/report/cashier" exact>
-      <TransaksiKasir />
-    </Route>
-    <Route path="/app/report/cogs" exact>
-      <LaporanHPP />
-    </Route>
-    <Route path="/app/report/pnl" exact>
-      <PNL />
-    </Route>
-    <Route path="/app/report/void" exact>
-      <TransaksiVoid />
-    </Route>
-    <Route path="/app/stock/update" exact>
-      <TambahItem />
-    </Route>
-    <Route path="/app/stock/history" exact>
-      <HistoryItem />
-    </Route>
-    <Route path="/app/my_items" exact>
-      <DaftarItem />
-    </Route>
-    <Route path="/app/my_items/add" exact>
-      <TambahItemManajemen />
-    </Route>
-    <Route path="/app/my_items/import" exact>
-      <ImportItem />
-    </Route>
-    <Route path="/app/printers/item" exact>
-      <HubungkanPrinter />
-    </Route>
-    <Route path="/app/events" exact>
-      <DaftarEvent />
-    </Route>
-    <Route path="/app/my_inventory" exact>
-      <DaftarInventory />
-    </Route>
-    <Route path="/app/my_inventory/manage/add" exact>
-      <TambahInventory />
-    </Route>
-    <Route path="/app/my_inventory/manage/update" exact>
-      <UpdateStokInventory />
-    </Route>
-    <Route path="/app/my_inventory/import" exact>
-      <ImportDataInventory />
-    </Route>
-    <Route path="/app/my_inventory/history" exact>
-      <HistoryUpdateInventory />
-    </Route>
-    <Route path="/app/my_inventory/recipes" exact>
-      <DaftarResep />
-    </Route>
-    <Route path="/app/printers" exact>
-      <SettingPrinter />
-    </Route>
-    <Route path="/app/purchase" exact>
-      <PurchaseOrder />
-    </Route>
-    <Route path="/app/settings/attendance" exact>
-      <Presensi />
-    </Route>
-    <Route path="/app/accounts" exact>
-      <ManajemenAccount />
-    </Route>
-    <Route path="/app/settings/profile" exact>
-      <ForgotPassword />
-    </Route>
-    <Route path="/app/branch/manage" exact>
-      <BranchPengaturan />
-    </Route>
-    <Route path="/app/branch/add" exact>
-      <BranchAdd />
-    </Route>
-  </AnimatedSwitch>
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AnimatedSwitch
+        atEnter={{ opacity: 0 }}
+        atLeave={{ opacity: 0 }}
+        atActive={{ opacity: 1 }}
+        className="switch-wrapper-app"
+      >
+        <Route path="/app" exact>
+          <Redirect to={"/app/home"} />
+        </Route>
+        <Route path="/app/home" exact>
+          <Dashboard />
+        </Route>
+        <Route path="/app/subscription" exact>
+          <Subscription />
+        </Route>
+        <Route path="/app/branch" exact>
+          <Branch />
+        </Route>
+        <Route path="/app/branch/qris" exact>
+          <Payment />
+        </Route>
+        <Route path="/app/branch/machines" exact>
+          <Machine />
+        </Route>
+        <Route path="/app/category" exact>
+          <Category />
+        </Route>
+        <Route path="/app/branch/join-akufood" exact>
+          <AkuFood />
+        </Route>
+        <Route path="/app/report/all" exact>
+          <AllTransaksi />
+        </Route>
+        <Route path="/app/report/summary" exact>
+          <RangkumanTransaksi />
+        </Route>
+        <Route path="/app/report/qris" exact>
+          <Qris />
+        </Route>
+        <Route path="/app/report/akufood" exact>
+          <TransaksiAkuFood />
+        </Route>
+        <Route path="/app/report/sales-item" exact>
+          <PenjualanItem />
+        </Route>
+        <Route path="/app/report/hours" exact>
+          <TransaksiPerJam />
+        </Route>
+        <Route path="/app/report/cashier" exact>
+          <TransaksiKasir />
+        </Route>
+        <Route path="/app/report/cogs" exact>
+          <LaporanHPP />
+        </Route>
+        <Route path="/app/report/pnl" exact>
+          <PNL />
+        </Route>
+        <Route path="/app/report/void" exact>
+          <TransaksiVoid />
+        </Route>
+        <Route path="/app/stock/update" exact>
+          <TambahItem />
+        </Route>
+        <Route path="/app/stock/history" exact>
+          <HistoryItem />
+        </Route>
+        <Route path="/app/my_items" exact>
+          <DaftarItem />
+        </Route>
+        <Route path="/app/my_items/add" exact>
+          <TambahItemManajemen />
+        </Route>
+        <Route path="/app/my_items/import" exact>
+          <ImportItem />
+        </Route>
+        <Route path="/app/printers/item" exact>
+          <HubungkanPrinter />
+        </Route>
+        <Route path="/app/events" exact>
+          <DaftarEvent />
+        </Route>
+        <Route path="/app/my_inventory" exact>
+          <DaftarInventory />
+        </Route>
+        <Route path="/app/my_inventory/manage/add" exact>
+          <TambahInventory />
+        </Route>
+        <Route path="/app/my_inventory/manage/update" exact>
+          <UpdateStokInventory />
+        </Route>
+        <Route path="/app/my_inventory/import" exact>
+          <ImportDataInventory />
+        </Route>
+        <Route path="/app/my_inventory/history" exact>
+          <HistoryUpdateInventory />
+        </Route>
+        <Route path="/app/my_inventory/recipes" exact>
+          <DaftarResep />
+        </Route>
+        <Route path="/app/printers" exact>
+          <SettingPrinter />
+        </Route>
+        <Route path="/app/purchase" exact>
+          <PurchaseOrder />
+        </Route>
+        <Route path="/app/settings/attendance" exact>
+          <Presensi />
+        </Route>
+        <Route path="/app/accounts" exact>
+          <ManajemenAccount />
+        </Route>
+        <Route path="/app/settings/profile" exact>
+          <ForgotPassword />
+        </Route>
+        <Route path="/app/branch/manage" exact>
+          <BranchPengaturan />
+        </Route>
+        <Route path="/app/branch/add" exact>
+          <BranchAdd />
+        </Route>
+      </AnimatedSwitch>
+    </Suspense>
+  );
 };

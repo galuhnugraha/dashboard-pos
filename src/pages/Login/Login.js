@@ -48,8 +48,7 @@ export const Login = observer(() => {
         store.auth.login(data).then(res => {
             message.success('Berhasil Masuk');
             setLoading(false);
-            history.push('/app/home');
-            return res;
+            history.push("/app/home");
         }).catch(err => {
             message.error(err.message);
             setLoading(false);
@@ -123,7 +122,7 @@ export const Login = observer(() => {
                                         loading={loading}
                                         htmlType="submit"
                                         size={'large'}
-                                        onSubmit={enterLoading}
+                                        // onSubmit={enterLoading}
                                         // onClick={enterLoading}
                                         className="login-form-button">
                                         Sign In
