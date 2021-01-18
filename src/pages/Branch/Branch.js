@@ -18,7 +18,7 @@ import { useHistory } from 'react-router-dom';
 import { useStore } from "../../utils/useStores";
 import { observer } from "mobx-react-lite";
 import './style.css';
-import xImg from "./xImg.jpeg"
+import {appConfig} from '../../config/app';
 
 export const Branch = observer((initialData) => {
 
@@ -27,6 +27,7 @@ export const Branch = observer((initialData) => {
 
   const [form] = Form.useForm();
   const [imgData, setImgData] = useState(null);
+  const [xImg , setXImg] = useState('')
 
 
   const [state, setState] = useState({
@@ -96,6 +97,8 @@ export const Branch = observer((initialData) => {
 
 
   const setEditMode = (value) => {
+    setXImg(value.member_photo)
+    console.log(xImg)
     setState(prevState => ({
       ...prevState,
       success: true
@@ -202,7 +205,7 @@ export const Branch = observer((initialData) => {
       }} key={row => row.id}>
         <Button type="primary" onClick={addBranch} style={{ marginTop: 25 }}><PlusOutlined />Tambah Data</Button>
         <Search
-          placeholder="input search text"
+          placeholder="Search...."
           onSearch={(value) => {
             store.member.selectedFilterValue = value;
             store.member.setPage(1);
@@ -296,7 +299,7 @@ export const Branch = observer((initialData) => {
               <input type="file" id="files" onChange={changeImage} style={{background: 'gray',height: 80,width: 80}}/>
             </div> */}
             {imgData ? <img src={imgData} alt="avatar" style={{ width: 100, height: 100, marginBottom: 15, borderRadius: 8 }} /> :
-              <img src={xImg} alt="avatar" style={{ width: 100, height: 100, marginBottom: 15, borderRadius: 8 }} />}
+              <img src={`${appConfig.apiUrl}/member_images/${xImg}`} alt="avatar" style={{ width: 100, height: 100, marginBottom: 15, borderRadius: 8 }} />}
             <input type="file" id="files" onChange={changeImage} className="custom-file-upload" />
           </Form.Item>
         </Form>

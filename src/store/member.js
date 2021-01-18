@@ -115,4 +115,5 @@ export class MemberStore {
   //   this.data = data.body.data;
   //   this.isLoading = false;
   // }
+
 }
