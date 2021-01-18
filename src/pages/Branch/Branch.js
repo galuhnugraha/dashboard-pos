@@ -298,7 +298,7 @@ export const Branch = observer((initialData) => {
             {/* <div>
               <input type="file" id="files" onChange={changeImage} style={{background: 'gray',height: 80,width: 80}}/>
             </div> */}
-            {imgData ? <img src={imgData} alt="avatar" style={{ width: 100, height: 100,marginBottom: 10, borderRadius: 4 }} /> :
+            {imgData ? <img src={imgData} alt="avatar" style={{ width: 150, height: 150,objectFit: 'contain', marginBottom: 15, borderRadius: 6 }} /> :
               <img src={xImg} alt="avatar" style={{ width: 110, height: 110, marginBottom: 10, borderRadius: 4 }} />}
             <input type="file" id="files" onChange={changeImage} />
           </Form.Item>
