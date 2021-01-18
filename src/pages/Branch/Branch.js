@@ -18,7 +18,7 @@ import { useHistory } from 'react-router-dom';
 import { useStore } from "../../utils/useStores";
 import { observer } from "mobx-react-lite";
 import './style.css';
-import xImg from "./xImg.jpeg";
+import { appConfig } from "../../config/app";
 
 export const Branch = observer((initialData) => {
 
@@ -27,7 +27,7 @@ export const Branch = observer((initialData) => {
 
   const [form] = Form.useForm();
   const [imgData, setImgData] = useState(null);
-  // const [xImg , setXImg] = useState('')
+  const [xImg , setXImg] = useState('')
 
 
   const [state, setState] = useState({
@@ -97,7 +97,7 @@ export const Branch = observer((initialData) => {
 
 
   const setEditMode = (value) => {
-    // setXImg(value.member_photo)
+    setXImg(value.member_photo)
     console.log(xImg)
     setState(prevState => ({
       ...prevState,
@@ -298,8 +298,8 @@ export const Branch = observer((initialData) => {
             {/* <div>
               <input type="file" id="files" onChange={changeImage} style={{background: 'gray',height: 80,width: 80}}/>
             </div> */}
-            {imgData ? <img src={imgData} alt="avatar" style={{ width: 150, height: 150,objectFit: 'contain', marginBottom: 15, borderRadius: 6 }} /> :
-              <img src={xImg} alt="avatar" style={{ width: 110, height: 110, marginBottom: 10, borderRadius: 4 }} />}
+            {imgData ? <img src={imgData} alt="avatar" style={{ width: 180, height: 140,objectFit: 'contain', marginBottom: 15, borderRadius: 6 }} /> :
+              <img src={`${appConfig.apiUrl}/member_images/${xImg}`} alt="avatar" style={{ width: 110, height: 110, marginBottom: 10, borderRadius: 4 }} />}
             <input type="file" id="files" onChange={changeImage} />
           </Form.Item>
         </Form>
